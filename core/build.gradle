@@ -9,3 +9,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project {
     name = appName + "-core"
 }
+
+buildall {
+source = sourceSets.main.allJava
+classpath = configurations.compile
+}

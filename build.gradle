@@ -62,8 +62,3 @@ project(":core") {
 tasks.eclipse.doLast {
     delete ".project"
 }
-
-buildall {
-source = sourceSets.main.allJava
-classpath = configurations.compile
-}
