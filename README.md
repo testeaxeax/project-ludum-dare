@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/testeaxeax/project-ludum-dare.svg?branch=master)](https://travis-ci.org/testeaxeax/project-ludum-dare)
 
-Installation instructions:
+**Installation instructions:**
 1. Clone repository using "git clone https://github.com/testeaxeax/project-ludum-dare"
 2. Open Eclipse
 3. Import the project using File > Import... > Gradle > Existing Gradle Project, then select the project's root folder and click on "Finish"
@@ -11,4 +11,4 @@ OR
 
 **NOTICE**: You will need to redo step 4.1 or 4.2 every time you refresh your gradle configuration
 
-Documentation: https://testeaxeax.github.io/project-ludum-dare/
+[Documentation](https://testeaxeax.github.io/project-ludum-dare/)
