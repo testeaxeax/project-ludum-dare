@@ -55,6 +55,7 @@ public final class SplashScreen implements Screen {
 	public void show() {
 		GameScreen.prefetch(game.assetmanager);
 		MainMenuScreen.prefetch(game.assetmanager);
+		CreditsScreen.prefetch(game.assetmanager);
 		showtime = TimeUtils.millis();
 	}
 
