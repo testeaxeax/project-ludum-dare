@@ -52,7 +52,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -99,13 +99,15 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		if (button == Input.Buttons.LEFT) {
 	          if(bcredits.onPress(screenX, screenY)) {
 	        	bcredits.setPressed(false);
-		        game.screenmanager.set(new GameScreen(game));
-		  		dispose();
+		        game.screenmanager.push(new CreditsScreen(game));
+            Gdx.input.setInputProcessor(null);
+	  	  		dispose();
 		      }
 	          if(bstart.onPress(screenX, screenY)) {
-		  		bstart.setPressed(false);
-	        	game.screenmanager.set(new GameScreen(game));
-	  			dispose();
+		    		bstart.setPressed(false);
+	        	game.screenmanager.push(new GameScreen(game));
+            Gdx.input.setInputProcessor(null);
+   	  			dispose();
 	          }
 	          return true;     
 	      }
@@ -168,6 +170,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	}
 
 	@Override
+
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		// TODO Auto-generated method stub
 		return false;
