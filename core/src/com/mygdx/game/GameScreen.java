@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public final class GameScreen implements Screen {
@@ -41,6 +42,11 @@ public final class GameScreen implements Screen {
 	
 	private double raydelta;
 	
+	
+	private int score = 0;
+	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
+	private GlyphLayout scoreLayout;
+	
 	public GameScreen(Project game) {
 		this.game = game;
 		
@@ -72,6 +78,8 @@ public final class GameScreen implements Screen {
 		texture_sunray_tip = new TextureRegion((Texture) game.assetmanager.get(SR_TIP));
 		
 		this.raydelta = 250d;
+		
+		scoreLayout = new GlyphLayout();
 	}
 
 	@Override
@@ -133,6 +141,9 @@ public final class GameScreen implements Screen {
 		float x = 6f;
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), (pb.getHeight() - 2*x) * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
+		
+		scoreLayout.setText(game.font, "Score: "  + score);
+		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
 		game.spritebatch.end();
 	}

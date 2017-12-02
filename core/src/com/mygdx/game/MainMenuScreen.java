@@ -99,13 +99,13 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		if (button == Input.Buttons.LEFT) {
 	          if(bcredits.onPress(screenX, screenY)) {
 	        	bcredits.setPressed(false);
-//		        game.screenmanager.set(new GameScreen(game));
-//		  		dispose();
+		        game.screenmanager.set(new GameScreen(game));
+		  		dispose();
 		      }
 	          if(bstart.onPress(screenX, screenY)) {
 		  		bstart.setPressed(false);
-//	        	game.screenmanager.set(new GameScreen(game));
-//	  			dispose();
+	        	game.screenmanager.set(new GameScreen(game));
+	  			dispose();
 	          }
 	          return true;     
 	      }
