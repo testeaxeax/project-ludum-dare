@@ -50,7 +50,7 @@ public final class GameScreen implements Screen {
 			this.planetTextures[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		this.planets = PlanetManager.setupPlanets(10, this);
-		sun = new Sun(this, 400, 400, 0, 100, 30, 0);
+		sun = new Sun(this, CAM_WIDTH / 2, CAM_HEIGHT / 2, 0, 100, 30, 0);
 
 	}
 
