@@ -23,6 +23,10 @@ public final class GameScreen implements Screen {
 	private Texture pbInfill;
 	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
 	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
+	
+	private Texture background;
+	private static final String BACKGROUND_TEXTURE_PATH = "graphics/gameBackground.png";
+	
 
 	private Texture[] planetTextures;
 	private ArrayList<Planet> planets;
@@ -39,6 +43,8 @@ public final class GameScreen implements Screen {
 		
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
+		
+		background = game.assetmanager.get(BACKGROUND_TEXTURE_PATH);
 		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
@@ -66,6 +72,9 @@ public final class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
+		
+		//BACKGROUND has to be drawn FIRST!!
+		game.spritebatch.draw(background, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		// Render progress bar
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
@@ -86,6 +95,8 @@ public final class GameScreen implements Screen {
 		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
+		
+		m.load(BACKGROUND_TEXTURE_PATH, Texture.class);
 		
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
@@ -115,6 +126,8 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(PB_BORDER_TEXTURE_PATH);
 		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
+		
+		game.assetmanager.unload(BACKGROUND_TEXTURE_PATH);
 		
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
