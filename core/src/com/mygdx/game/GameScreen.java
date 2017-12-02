@@ -71,7 +71,7 @@ public final class GameScreen implements Screen {
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		texture_sunray_tip = new TextureRegion((Texture) game.assetmanager.get(SR_TIP));
 		
-		this.raydelta = 0;
+		this.raydelta = 250d;
 	}
 
 	@Override
