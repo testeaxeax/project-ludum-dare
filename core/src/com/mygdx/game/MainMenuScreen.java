@@ -97,7 +97,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
 	      if(bcredits.onPress(screenX, screenY)) {
-		        game.screenmanager.push(new CreditsScreen(game));   
+		        game.screenmanager.push(new CreditsScreen(game));
+	      }
 	      if(bstart.onPress(screenX, screenY)) {
 	        	game.screenmanager.push(new GameScreen(game));
 	      }
