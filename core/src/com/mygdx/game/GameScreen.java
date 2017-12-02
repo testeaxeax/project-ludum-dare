@@ -82,6 +82,7 @@ public final class GameScreen implements Screen {
 		if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
 			this.raydelta = 0d;
 			sun.decreasetemp(3);
+			rayHitsPlanets();
 		}
 		
 		
@@ -136,6 +137,24 @@ public final class GameScreen implements Screen {
 		game.spritebatch.end();
 	}
 
+	
+	private void rayHitsPlanets() {
+		ArrayList<Planet> toRemove = new ArrayList<Planet>();
+		for(int i = 0; i < 4; i++) {
+			for(Planet p : planets) {
+				if(sun.getRotation() + 90*i > p.getAngleRelative(sun.getPos().x, sun.getPos().y) -p.getAngularWidth(sun.getPos().x, sun.getPos().y) &&
+				   sun.getRotation() + 90*i < p.getAngleRelative(sun.getPos().x, sun.getPos().y) +p.getAngularWidth(sun.getPos().x, sun.getPos().y )) {
+					toRemove.add(p);
+				}
+			}
+		}
+		for(Planet p : toRemove) {
+			planets.remove(p);
+		}
+	}
+	
+	
+	
 	public ProgressBar getPB() {
 		return this.pb;
 	}
