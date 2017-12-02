@@ -15,7 +15,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String STARTBUTTON_TEXTURE_ASSET_PATH = "graphics/startbutton.png";
 	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
-	private static final String BACKGROUND_ASSET_PATH = "graphics/gamebackground.png";
+	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
 	
 	private Project game;
 	private OrthographicCamera cam;
