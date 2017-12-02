@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Sun {
 
 	private static int MAX_TEMP = 100;
+	public static int WIDTH = 400;
+	public static int HEIGHT = 400;
 	
 	private Vector2 pos;
 	private Vector2 origin;
