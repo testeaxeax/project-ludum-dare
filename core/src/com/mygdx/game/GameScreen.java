@@ -14,12 +14,13 @@ public final class GameScreen implements Screen {
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	
+	private Project game;
+	private OrthographicCamera cam;
+	
 	private static final int PLANET_TEXTURES = 7;
 	private Texture[] tAPlanets;
 	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
 	
-	public Project game;
-	private OrthographicCamera cam;
 	private ArrayList<Planet> planets;
 	
 	public GameScreen(Project game) {
