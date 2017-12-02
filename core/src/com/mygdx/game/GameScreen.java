@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -21,7 +23,11 @@ public final class GameScreen implements Screen {
 	private Texture pbInfill;
 	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
 	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
-	
+
+	private Texture[] planetTextures;
+	private ArrayList<Planet> planets;
+	private static final int PLANET_TEXTURES = 7;
+	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
 	
 	public GameScreen(Project game) {
 		this.game = game;
@@ -36,6 +42,14 @@ public final class GameScreen implements Screen {
 		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
+		pb.setPercentage(0.2f);
+		
+		this.planetTextures = new Texture[PLANET_TEXTURES];
+		
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			this.planetTextures[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
+		
+		this.planets = PlanetManager.setupPlanets(10, this);
 		sun = new Sun(this, 400, 400, 0, 100, 30, 0);
 
 	}
@@ -55,6 +69,8 @@ public final class GameScreen implements Screen {
 		// Render progress bar
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
+		for(Planet p : this.planets)
+			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
 		// Render Sun
 		int sun_width = sun.getSun_texture().getWidth();
 		int sun_height = sun.getSun_texture().getHeight();
@@ -70,6 +86,9 @@ public final class GameScreen implements Screen {
 		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
+		
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 	}
 	
 	@Override
@@ -96,5 +115,16 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(PB_BORDER_TEXTURE_PATH);
 		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
+		
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
+	}
+
+	public Texture[] getPlanetTextures() {
+		return this.planetTextures;
+	}
+	
+	public ArrayList<Planet> getPlanets() {
+		return planets;
 	}
 }
