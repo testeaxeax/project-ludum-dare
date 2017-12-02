@@ -20,9 +20,7 @@ public final class GameScreen implements Screen {
 	
 	private Sun sun;
 	private TextureRegion texture_sunray_shaft;
-	private TextureRegion texture_sunray_tip;
 	private static final String SR_SHAFT = "graphics/rayshaft.png";
-	private static final String SR_TIP = "graphics/raytip.png";
 	
 	private ProgressBar pb;
 	private Texture pbBorder;
@@ -69,7 +67,6 @@ public final class GameScreen implements Screen {
 		
 		sun = new Sun(this, CAM_WIDTH / 2, CAM_HEIGHT / 2, 0, 100, 30, 1);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
-		texture_sunray_tip = new TextureRegion((Texture) game.assetmanager.get(SR_TIP));
 		
 		this.raydelta = 250d;
 	}
@@ -178,7 +175,6 @@ public final class GameScreen implements Screen {
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		m.load(SR_SHAFT, Texture.class);
-		m.load(SR_TIP, Texture.class);
 	}
 	
 	@Override
@@ -207,6 +203,8 @@ public final class GameScreen implements Screen {
 		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
 		
 		game.assetmanager.unload(BACKGROUND_TEXTURE_PATH);
+		
+		game.assetmanager.unload(SR_SHAFT);
 		
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
