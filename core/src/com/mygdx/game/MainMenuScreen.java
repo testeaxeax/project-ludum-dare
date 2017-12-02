@@ -16,26 +16,36 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private static final String STARTBUTTON_TEXTURE_ASSET_PATH = "graphics/startbutton.png";
 	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
+	private static final String TEXTURE_BLACK_PATH = "graphics/black.png";
 	
 	private Project game;
 	private OrthographicCamera cam;
 	private Button bstart;
 	private Button bcredits;
 	private Texture background;
+	private Texture tBlack;
 	
 	public MainMenuScreen(Project game) {
 		this.game = game;
+		
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
+		
+		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
+		
 		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
 		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		
 		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
 		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
+		
 		bcredits.setX(bcredits.getX() - bcredits.getWidth() / 2);
 		bcredits.setY(bcredits.getY() - bcredits.getHeight() / 2);
+		
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
 		game.spritebatch.setProjectionMatrix(cam.combined);
+		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.input.setInputProcessor(this);
 	}
@@ -49,20 +59,66 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
+		
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
-		game.spritebatch.draw(bstart.getTexture(),
-				bstart.getX(), bstart.getY(),
-				bstart.getWidth(), bstart.getHeight());
-		game.spritebatch.draw(bcredits.getTexture(),
-				bcredits.getX(), bcredits.getY(),
-				bcredits.getWidth(), bcredits.getHeight());
+		
+		if(!bstart.isPressed())
+			game.spritebatch.draw(bstart.getTexture(), bstart.getX(), bstart.getY(), bstart.getWidth(), bstart.getHeight());
+		else {
+			game.spritebatch.draw(tBlack, bstart.getX() - 1, bstart.getY() - 2, bstart.getWidth() + 2, bstart.getHeight() + 4);
+			game.spritebatch.draw(bstart.getTexture(), bstart.getX() + 2, bstart.getY() + 1, bstart.getWidth() - 4, bstart.getHeight() - 2);
+		}
+		
+		
+		if(!bcredits.isPressed())
+			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX(), bcredits.getY(), bcredits.getWidth(), bcredits.getHeight());
+		else {
+			game.spritebatch.draw(tBlack, bcredits.getX() - 1, bcredits.getY() - 2, bcredits.getWidth() + 2, bcredits.getHeight() + 4);
+			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX() + 2, bcredits.getY() + 1, bcredits.getWidth() - 4, bcredits.getHeight() - 2);
+		}
 		game.spritebatch.end();
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			if(bcredits.onPress(screenX, screenY))
+				bcredits.setPressed(true);
+			if(bstart.onPress(screenX, screenY))
+				bstart.setPressed(true);
+			
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (button == Input.Buttons.LEFT) {
+	          if(bcredits.onPress(screenX, screenY)) {
+	        	bcredits.setPressed(false);
+		        game.screenmanager.push(new CreditsScreen(game));
+            Gdx.input.setInputProcessor(null);
+	  	  		dispose();
+		      }
+	          if(bstart.onPress(screenX, screenY)) {
+		    		bstart.setPressed(false);
+	        	game.screenmanager.push(new GameScreen(game));
+            Gdx.input.setInputProcessor(null);
+   	  			dispose();
+	          }
+	          return true;     
+	      }
+	      return false;
 	}
 
 	public static void prefetch(AssetManager m) {
 		m.load(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class);
 		m.load(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class);
 		m.load(BACKGROUND_ASSET_PATH, Texture.class);
+		m.load(TEXTURE_BLACK_PATH, Texture.class);
 	}
 	
 	@Override
@@ -90,6 +146,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		game.assetmanager.unload(STARTBUTTON_TEXTURE_ASSET_PATH);
 		game.assetmanager.unload(CREDITSBUTTON_TEXTURE_ASSET_PATH);
 		game.assetmanager.unload(BACKGROUND_ASSET_PATH);
+		game.assetmanager.unload(TEXTURE_BLACK_PATH);
+		
 		Gdx.input.setInputProcessor(null);
 	}
 
@@ -112,28 +170,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (button == Input.Buttons.LEFT) {
-	          if(bcredits.onPress(screenX, screenY)) {
-		        game.screenmanager.push(new CreditsScreen(game));
-		        Gdx.input.setInputProcessor(null);
-		      }
-	          if(bstart.onPress(screenX, screenY)) {
-	        	game.screenmanager.push(new GameScreen(game));
-	        	Gdx.input.setInputProcessor(null);
-	          }
-	          return true;     
-	      }
-	      return false;
-	}
 
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		// TODO Auto-generated method stub
 		return false;
