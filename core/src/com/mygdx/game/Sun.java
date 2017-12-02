@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Sun {
-
+	
+	private static final String SUN_TEXTURE_PATH = "graphics/sun_texture.png";
+	
 	private static int MAX_TEMP = 100;
 	public static int WIDTH = 400;
 	public static int HEIGHT = 400;
@@ -38,7 +40,7 @@ public class Sun {
 		this.pos = new Vector2(x, y);
 		degree = 0;
 		temp = 0;
-		sun_texture = gamescreen.getGame().assetmanager.get("graphics/sun_texture.png", Texture.class);
+		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
 	public void update(float delta) {
@@ -73,16 +75,16 @@ public class Sun {
 		
 		switch (blast_index){
 		case 0:
-			blast_degree = 0;
+			blast_degree = 0 + rotation;
 			break;
 		case 1:
-			blast_degree = 90;
+			blast_degree = 90 + rotation;
 			break;
 		case 2:
-			blast_degree = 180;
+			blast_degree = 180 + rotation;
 			break;
 		case 3:
-			blast_degree = 270;
+			blast_degree = 270 + rotation;
 		}
 		blast_degree += rotation;
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
@@ -90,6 +92,14 @@ public class Sun {
 		return blast_pos;
 	}
 	
+	public int getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
 	public int getRotation() {
 		return rotation;
 	}
@@ -115,10 +125,10 @@ public class Sun {
 	}
 	
 	public static void prefetch(AssetManager m) {
-		m.load("graphics/sun_texture.png", Texture.class);
+		m.load(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
 	public static void dispose(AssetManager m) {
-		m.unload("graphics/sun_texture.png");
+		m.unload(SUN_TEXTURE_PATH);
 	}
 }

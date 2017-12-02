@@ -37,9 +37,7 @@ public final class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
-		// TODO replace ScreenTemplate with actual game/menu screen
 		GameScreen.prefetch(game.assetmanager);
-		
 		showtime = TimeUtils.millis();
 	}
 

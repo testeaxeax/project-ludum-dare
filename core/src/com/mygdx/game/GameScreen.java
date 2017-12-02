@@ -19,8 +19,8 @@ public final class GameScreen implements Screen {
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
-	private final String pbTextureBoderPath = "graphics/pbBordertest.png";
-	private final String pbTextureInfillPath = "graphics/pbInfilltest.png";
+	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
+	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
 	
 	
 	public GameScreen(Project game) {
@@ -31,12 +31,13 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		
-		pbBorder = game.assetmanager.easyget(pbTextureBoderPath, Texture.class);
-		pbInfill = game.assetmanager.easyget(pbTextureInfillPath, Texture.class);
+		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
+		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
+		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
-		pb.setPercentage(0.5f);
 		sun = new Sun(this, 400, 400, 0, 100, 0, 30);
+
 	}
 
 	public Project getGame() {
@@ -50,7 +51,6 @@ public final class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		game.spritebatch.begin();
 		// Render progress bar
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
@@ -68,6 +68,8 @@ public final class GameScreen implements Screen {
 
 	public static void prefetch(AssetManager m) {
 		Sun.prefetch(m);
+		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
+		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
 	}
 	
 	@Override
@@ -92,7 +94,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		game.assetmanager.unload(pbTextureBoderPath);
-		game.assetmanager.unload(pbTextureInfillPath);
+		game.assetmanager.unload(PB_BORDER_TEXTURE_PATH);
+		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
 	}
 }
