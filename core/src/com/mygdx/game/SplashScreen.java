@@ -37,7 +37,6 @@ public final class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
-		
 		GameScreen.prefetch(game.assetmanager);
 		showtime = TimeUtils.millis();
 	}

@@ -17,6 +17,7 @@ public final class GameScreen implements Screen {
 	private Project game;
 	private OrthographicCamera cam;
 	
+	private Sun sun;
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
@@ -49,6 +50,8 @@ public final class GameScreen implements Screen {
 			this.planetTextures[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		this.planets = PlanetManager.setupPlanets(10, this);
+		sun = new Sun(this, 400, 400, 0, 100, 30, 0);
+
 	}
 
 	public Project getGame() {
@@ -63,14 +66,24 @@ public final class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
+		// Render progress bar
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
 		for(Planet p : this.planets)
 			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
+		// Render Sun
+		int sun_width = sun.getSun_texture().getWidth();
+		int sun_height = sun.getSun_texture().getHeight();
+		sun.update(delta);
+		game.spritebatch.draw (sun.getSun_texture(), (float) sun.getPos().x - sun_width / 2,
+				(float) sun.getPos().y - sun_height / 4, (float) sun_width / 2, (float) sun_height / 2,
+				(float) sun_width, (float) sun_height, 1, 1, (float) sun.getRotation(), 0, 0, (int) sun_width,
+				(int) sun_height, false, false);
 		game.spritebatch.end();
 	}
 
 	public static void prefetch(AssetManager m) {
+		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
 		

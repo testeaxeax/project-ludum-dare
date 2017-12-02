@@ -18,18 +18,20 @@ public class Sun {
 	private int temp;
 	private int deltatemp;
 	private int sun_radius;
-	private int rotation;
+	private float rotation;
 	private int deltarotation;
 	private Texture sun_texture;
 	
 
-	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius) {
+	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltarotation, int deltatemp) {
 		int x;
 		int y;
 		
 		this.radius = radius;
 		this.sun_radius = sun_radius;
 		this.rotation = 0;
+		this.deltarotation = deltarotation;
+		this.deltatemp = deltatemp;
 		this.origin = new Vector2(x_origin, y_origin);
 		x = (int) (origin.x + Math.cos(degree) * this.radius);
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
@@ -39,13 +41,13 @@ public class Sun {
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
-	public void update(int delta) {
+	public void update(float delta) {
 		temp += deltatemp * delta;
 		if(temp > MAX_TEMP) {
 			// TODO uncomment once implemented
 			//game.gameover();
 		} else {
-			rotation += deltarotation * delta;
+			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
 			pos.x = (int) (origin.x + Math.cos(degree) * radius);
 			pos.y = (int) (origin.y + Math.sin(degree) * radius);
@@ -71,18 +73,18 @@ public class Sun {
 		
 		switch (blast_index){
 		case 0:
-			blast_degree = 0 + rotation;
+			blast_degree = (int) (0 + rotation);
 			break;
 		case 1:
-			blast_degree = 90 + rotation;
+			blast_degree = (int) (90 + rotation);
 			break;
 		case 2:
-			blast_degree = 180 + rotation;
+			blast_degree = (int) (180 + rotation);
 			break;
 		case 3:
-			blast_degree = 270 + rotation;
+			blast_degree = (int) (270 + rotation);
 		}
-		
+		blast_degree += rotation;
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
 		blast_pos.y = (int) (pos.y + Math.cos(blast_degree) * sun_radius);
 		return blast_pos;
@@ -96,7 +98,7 @@ public class Sun {
 		this.radius = radius;
 	}
 
-	public int getRotation() {
+	public float getRotation() {
 		return rotation;
 	}
 
