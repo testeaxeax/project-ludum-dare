@@ -31,7 +31,7 @@ public class Sun {
 		this.sun_radius = sun_radius;
 		this.rotation = 0;
 		this.deltarotation = deltarotation;
-		this.deltatemp = deltarotation;
+		this.deltatemp = deltatemp;
 		this.origin = new Vector2(x_origin, y_origin);
 		x = (int) (origin.x + Math.cos(degree) * this.radius);
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
