@@ -39,8 +39,9 @@ public final class GameScreen implements Screen {
 	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
 	private static final int MAX_PLANETS = 10;
 	
-	private double raydelta;
+	private ArrayList<Explosion> explosions;
 	
+	private double raydelta;
 	
 	private int score = 0;
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
@@ -78,6 +79,9 @@ public final class GameScreen implements Screen {
 		this.raydelta = 250d;
 		
 		scoreLayout = new GlyphLayout();
+		
+		Explosion.setup(game.assetmanager);
+		this.explosions = new ArrayList<Explosion>();
 	}
 
 	@Override
@@ -115,6 +119,18 @@ public final class GameScreen implements Screen {
 
 		int sun_width = sun.getSun_texture().getWidth();
 		int sun_height = sun.getSun_texture().getHeight();
+		
+		// Render Explosions
+		for(int i = this.explosions.size() - 1; i >= 0; i--) {
+			Explosion e = this.explosions.get(i);
+			Texture t = e.getTexture(delta);
+			
+			if(t != null)
+				game.spritebatch.draw(t, e.getX(), e.getY(), e.getRadius(), e.getRadius());
+			else
+				this.explosions.remove(i);
+		}
+		
 		
 		// Render rays
 		if(this.raydelta < 180) {
@@ -161,6 +177,8 @@ public final class GameScreen implements Screen {
 			}
 		}
 		for(Planet p : toRemove) {
+			this.explosions.add(new Explosion(p));
+			p.destroy();
 			planets.remove(p);
 		}
 	}
@@ -190,6 +208,8 @@ public final class GameScreen implements Screen {
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		m.load(SR_SHAFT, Texture.class);
+		
+		Explosion.load(m);
 	}
 	
 	@Override

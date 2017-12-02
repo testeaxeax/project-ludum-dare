@@ -97,18 +97,19 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-	          if(bcredits.onPress(screenX, screenY)) {
-	        	bcredits.setPressed(false);
+	      if(bcredits.onPress(screenX, screenY)) {
 		        game.screenmanager.push(new CreditsScreen(game));
             Gdx.input.setInputProcessor(null);
             dispose();
-		      }
-	          if(bstart.onPress(screenX, screenY)) {
-		    		bstart.setPressed(false);
+		    }
+	          
+	      if(bstart.onPress(screenX, screenY)) {
 	        	game.screenmanager.push(new GameScreen(game));
-            Gdx.input.setInputProcessor(null);
-            dispose();
-	          }
+	        	Gdx.input.setInputProcessor(null);
+   	  			dispose();
+	      }
+	          bstart.setPressed(false);
+	          bcredits.setPressed(false);
 	          return true;     
 	      }
 	      return false;

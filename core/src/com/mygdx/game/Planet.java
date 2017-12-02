@@ -77,6 +77,6 @@ public class Planet{
 	}
 	
 	public void destroy() {
-		this.screen.getGame().assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play();
+		this.screen.getGame().assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
 	}
 }
