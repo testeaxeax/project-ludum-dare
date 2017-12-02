@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +10,9 @@ public class Project extends Game {
 	
 	// Globally used constants
 	public static final int SCREEN_HEIGHT = 800;
-	public static final int SCREEN_WIDTH = 800;
+	public static final int SCREEN_WIDTH = 1024;
+	
+	public static final Random RAND = new Random();
 	
 	// Globally used variables required for management and rendering
 	public SpriteBatch spritebatch;
