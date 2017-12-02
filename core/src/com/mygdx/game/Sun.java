@@ -55,7 +55,8 @@ public class Sun {
 	}
 	
 	public void increasetemp(int delta) {
-		temp += delta;
+		if(temp < MAX_TEMP)temp += delta;
+		else temp = MAX_TEMP;
 	}
 	
 	public void decreasetemp(int delta) {

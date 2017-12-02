@@ -25,9 +25,11 @@ public class ProgressBar {
 	
 	public void update(Sun sun) {
 		this.percentage = sun.getTemp() / Sun.MAX_TEMP;
+		if(percentage > 1)percentage = 1;
 	}
 	
 	public void setPercentage(float percentage) {
+		if(percentage > 1)percentage = 1;
 		this.percentage = percentage;
 	}
 	
