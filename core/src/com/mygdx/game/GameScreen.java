@@ -36,7 +36,7 @@ public final class GameScreen implements Screen {
 		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
-		sun = new Sun(this, 400, 400, 0, 100, 30, 100);
+		sun = new Sun(this, 400, 400, 0, 100, 30, 0);
 
 	}
 
