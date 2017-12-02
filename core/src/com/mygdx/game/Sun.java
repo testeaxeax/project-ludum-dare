@@ -38,7 +38,7 @@ public class Sun {
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
 		this.pos = new Vector2(x, y);
 		degree = 0;
-		temp = 0;
+		temp = 5;
 		this.gamescreen = gamescreen;
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
