@@ -37,6 +37,10 @@ public final class GameScreen implements Screen {
 		pb.setPercentage(0.5f);
 	}
 
+	public Project getGame() {
+		return game;
+	}
+
 	@Override
 	public void show() {
 	}
