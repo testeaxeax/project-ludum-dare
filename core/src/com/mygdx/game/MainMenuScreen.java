@@ -101,13 +101,13 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	        	bcredits.setPressed(false);
 		        game.screenmanager.push(new CreditsScreen(game));
             Gdx.input.setInputProcessor(null);
-	  	  		dispose();
+            dispose();
 		      }
 	          if(bstart.onPress(screenX, screenY)) {
 		    		bstart.setPressed(false);
 	        	game.screenmanager.push(new GameScreen(game));
             Gdx.input.setInputProcessor(null);
-   	  			dispose();
+            dispose();
 	          }
 	          return true;     
 	      }
