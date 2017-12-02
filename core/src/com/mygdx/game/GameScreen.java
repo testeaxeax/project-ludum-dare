@@ -47,7 +47,7 @@ public final class GameScreen implements Screen {
 		cam.update();
 		
 		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 1, 1);
 		
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
