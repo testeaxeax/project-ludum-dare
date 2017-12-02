@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,20 +17,30 @@ public final class GameScreen implements Screen {
 	private Project game;
 	private OrthographicCamera cam;
 	
+	private static final int PLANET_TEXTURES = 7;
+	private Texture[] tAPlanets;
+	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
+  
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
 	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
 	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
 	
+	private ArrayList<Planet> planets;
 	
 	public GameScreen(Project game) {
 		this.game = game;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
-		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+
+		this.tAPlanets = new Texture[PLANET_TEXTURES];
+		
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			this.tAPlanets[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
+		
+		this.planets = PlanetManager.setupPlanets(10, this);
 		
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
@@ -36,6 +48,9 @@ public final class GameScreen implements Screen {
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
+    
+		game.spritebatch.setProjectionMatrix(cam.combined);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 
 	public Project getGame() {
@@ -44,21 +59,32 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
+		
 	}
-
+	
 	@Override
 	public void render(float delta) {
+		
+
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		game.spritebatch.begin();
-		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
-		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
-		game.spritebatch.end();
+		this.game.spritebatch.begin();
+		for(Planet p : this.planets)
+			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
+		this.game.spritebatch.end();
 	}
 
 	public static void prefetch(AssetManager m) {
-		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
-		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
+      m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
+		  m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
+	}
+	
+	public Texture[] getPlanetTextures() {
+		return this.tAPlanets;
+		
 	}
 	
 	@Override
@@ -85,5 +111,12 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(PB_BORDER_TEXTURE_PATH);
 		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
+    
+		for(int i = 0; i < PLANET_TEXTURES; i++)
+			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
+	}
+
+	public ArrayList<Planet> getPlanets() {
+		return planets;
 	}
 }
