@@ -14,7 +14,7 @@ public final class SplashScreen implements Screen {
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	// SplashScreen will be displayed for at least 5 seconds
-	private static final int MIN_SHOWTIME = 5000;
+	private static final int MIN_SHOWTIME = 1000;
 
 	private Project game;
 	private OrthographicCamera cam;
