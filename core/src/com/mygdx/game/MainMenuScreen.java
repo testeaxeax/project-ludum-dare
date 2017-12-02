@@ -26,8 +26,12 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public MainMenuScreen(Project game) {
 		this.game = game;
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
-		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		bstart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 4, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
 		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
+		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
+		bcredits.setX(bcredits.getX() - bcredits.getWidth() / 2);
+		bcredits.setY(bcredits.getY() - bcredits.getHeight() / 2);
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
@@ -47,10 +51,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
 		game.spritebatch.draw(bstart.getTexture(),
-				bstart.getX() - bstart.getWidth() / 2, bstart.getY() - bstart.getHeight() / 2,
+				bstart.getX(), bstart.getY(),
 				bstart.getWidth(), bstart.getHeight());
 		game.spritebatch.draw(bcredits.getTexture(),
-				bcredits.getX() - bcredits.getWidth() / 2, bcredits.getY() - bcredits.getHeight() / 2,
+				bcredits.getX(), bcredits.getY(),
 				bcredits.getWidth(), bcredits.getHeight());
 		game.spritebatch.end();
 	}
@@ -110,14 +114,14 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
+	          if(bcredits.onPress(screenX, screenY)) {
+		        game.screenmanager.set(new GameScreen(game));
+		  		dispose();
+		      }
 	          if(bstart.onPress(screenX, screenY)) {
 	        	game.screenmanager.set(new GameScreen(game));
 	  			dispose();
 	          }
-	          if(bcredits.onPress(screenX, screenY)) {
-		        	game.screenmanager.set(new CreditsScreen(game));
-		  			dispose();
-		          }
 	          return true;     
 	      }
 	      return false;
