@@ -18,7 +18,7 @@ public class Sun {
 	private int temp;
 	private int deltatemp;
 	private int sun_radius;
-	private int rotation;
+	private float rotation;
 	private int deltarotation;
 	private Texture sun_texture;
 	
@@ -73,18 +73,18 @@ public class Sun {
 		
 		switch (blast_index){
 		case 0:
-			blast_degree = 0 + rotation;
+			blast_degree = (int) (0 + rotation);
 			break;
 		case 1:
-			blast_degree = 90 + rotation;
+			blast_degree = (int) (90 + rotation);
 			break;
 		case 2:
-			blast_degree = 180 + rotation;
+			blast_degree = (int) (180 + rotation);
 			break;
 		case 3:
-			blast_degree = 270 + rotation;
+			blast_degree = (int) (270 + rotation);
 		}
-		
+		blast_degree += rotation;
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
 		blast_pos.y = (int) (pos.y + Math.cos(blast_degree) * sun_radius);
 		return blast_pos;
@@ -98,7 +98,7 @@ public class Sun {
 		this.radius = radius;
 	}
 
-	public int getRotation() {
+	public float getRotation() {
 		return rotation;
 	}
 
