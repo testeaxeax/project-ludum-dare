@@ -8,14 +8,14 @@ public class Sun {
 	
 	private static final String SUN_TEXTURE_PATH = "graphics/sun_texture.png";
 	
-	private static int MAX_TEMP = 100;
-	
+	public static int MAX_TEMP = 100;
+
 	private Vector2 pos;
 	private Vector2 origin;
 	private float degree;
 	private float speed;
 	private int radius;
-	private int temp;
+	private float temp;
 	private int deltatemp;
 	private int sun_radius;
 	private float rotation;
@@ -41,16 +41,16 @@ public class Sun {
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
-	public void update(float delta) {
-		temp += deltatemp * delta;
+	public void update(float delta, boolean touched) {
+		temp += deltatemp * delta * 1f;
 		if(temp > MAX_TEMP) {
 			// TODO uncomment once implemented
 			//game.gameover();
-		} else {
+		} else if(!touched){
 			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
-			pos.x = (int) (origin.x + Math.cos(degree) * radius);
-			pos.y = (int) (origin.y + Math.sin(degree) * radius);
+//			pos.x = (int) (origin.x + Math.cos(degree) * radius);
+//			pos.y = (int) (origin.y + Math.sin(degree) * radius);
 		}
 	}
 	
@@ -93,7 +93,11 @@ public class Sun {
 	public int getRadius() {
 		return radius;
 	}
-
+	
+	public int getSunRadius() {
+		return sun_radius;
+	}
+	
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
@@ -128,5 +132,9 @@ public class Sun {
 	
 	public static void dispose(AssetManager m) {
 		m.unload(SUN_TEXTURE_PATH);
+	}
+
+	public float getTemp() {
+		return temp;
 	}
 }

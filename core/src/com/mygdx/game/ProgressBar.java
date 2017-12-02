@@ -11,7 +11,7 @@ public class ProgressBar {
 	private Texture infill;
 	
 	
-	private float percentage = 0;
+	private float percentage = 0f;
 	
 	public ProgressBar(float width, float height, float posX, float posY, Texture border, Texture infill) {
 		this.border = border;
@@ -21,6 +21,10 @@ public class ProgressBar {
 		this.posY = posY;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void update(Sun sun) {
+		this.percentage = sun.getTemp() / Sun.MAX_TEMP;
 	}
 	
 	public void setPercentage(float percentage) {
