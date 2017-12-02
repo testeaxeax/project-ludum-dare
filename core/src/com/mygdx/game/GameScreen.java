@@ -37,6 +37,7 @@ public final class GameScreen implements Screen {
 	private ArrayList<Planet> planets;
 	private static final int PLANET_TEXTURES = 7;
 	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
+	private static final int MAX_PLANETS = 10;
 	
 	private double raydelta;
 	
@@ -69,7 +70,7 @@ public final class GameScreen implements Screen {
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			this.planetTextures[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
-		this.planets = PlanetManager.setupPlanets(10, this);
+		this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
 		
 		sun = new Sun(this, CAM_WIDTH / 2, CAM_HEIGHT / 2, 0, 100, 30, 1);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
@@ -81,6 +82,9 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		if(planets.isEmpty()) {
+			this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
+		}
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
 		
