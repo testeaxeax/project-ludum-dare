@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Sun {
-
+	
+	private static final String SUN_TEXTURE_PATH = "graphics/sun_texture.png";
+	
 	private static int MAX_TEMP = 100;
 	
 	private Vector2 pos;
@@ -33,7 +35,7 @@ public class Sun {
 		this.pos = new Vector2(x, y);
 		degree = 0;
 		temp = 0;
-		sun_texture = gamescreen.getGame().assetmanager.get("graphics/sun_texture.png", Texture.class);
+		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
 	public void update(int delta) {
@@ -109,10 +111,10 @@ public class Sun {
 	}
 	
 	public static void prefetch(AssetManager m) {
-		m.load("graphics/sun_texture.png", Texture.class);
+		m.load(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
 	public static void dispose(AssetManager m) {
-		m.unload("graphics/sun_texture.png");
+		m.unload(SUN_TEXTURE_PATH);
 	}
 }
