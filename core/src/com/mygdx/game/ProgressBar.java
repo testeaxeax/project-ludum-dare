@@ -14,6 +14,9 @@ public class ProgressBar {
 	private float percentage = 0;
 	
 	public ProgressBar(float width, float height, float posX, float posY, Texture border, Texture infill) {
+		this.border = border;
+		this.infill = infill;
+		
 		this.posX = posX;
 		this.posY = posY;
 		this.width = width;
