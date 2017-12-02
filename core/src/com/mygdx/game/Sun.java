@@ -21,6 +21,7 @@ public class Sun {
 	private float rotation;
 	private int deltarotation;
 	private Texture sun_texture;
+	private GameScreen gamescreen;
 	
 
 	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltarotation, int deltatemp) {
@@ -38,6 +39,7 @@ public class Sun {
 		this.pos = new Vector2(x, y);
 		degree = 0;
 		temp = 0;
+		this.gamescreen = gamescreen;
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
@@ -45,7 +47,7 @@ public class Sun {
 		temp += deltatemp * delta * 1f;
 		if(temp > MAX_TEMP) {
 			// TODO uncomment once implemented
-			//game.gameover();
+			gamescreen.gameover();
 		} else if(!touched){
 			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
