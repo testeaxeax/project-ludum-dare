@@ -115,12 +115,12 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
 	          if(bcredits.onPress(screenX, screenY)) {
-		        game.screenmanager.set(new GameScreen(game));
-		  		dispose();
+//		        game.screenmanager.set(new GameScreen(game));
+//		  		dispose();
 		      }
 	          if(bstart.onPress(screenX, screenY)) {
-//	        	game.screenmanager.set(new GameScreen(game));
-//	  			dispose();
+	        	game.screenmanager.set(new GameScreen(game));
+	  			dispose();
 	          }
 	          return true;     
 	      }
