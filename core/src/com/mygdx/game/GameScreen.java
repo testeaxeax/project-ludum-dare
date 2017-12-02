@@ -189,6 +189,10 @@ public final class GameScreen implements Screen {
 		return this.pb;
 	}
 	
+	public void gameover() {
+		game.screenmanager.set(new GameoverMenuScreen(game));
+	}
+	
 	public Project getGame() {
 		return game;
 	}

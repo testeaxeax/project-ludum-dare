@@ -9,37 +9,37 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
-public final class MainMenuScreen implements Screen, InputProcessor {
+public final class GameoverMenuScreen implements Screen, InputProcessor {
 	
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
-	private static final String STARTBUTTON_TEXTURE_ASSET_PATH = "graphics/startbutton.png";
-	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
+	private static final String RESTARTBUTTON_TEXTURE_ASSET_PATH = "graphics/restartbutton.png";
+	private static final String MENUBUTTON_TEXTURE_ASSET_PATH = "graphics/menubutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
 	private static final String TEXTURE_BLACK_PATH = "graphics/black.png";
 	
 	private Project game;
 	private OrthographicCamera cam;
-	private Button bstart;
-	private Button bcredits;
+	private Button brestart;
+	private Button bmenu;
 	private Texture background;
 	private Texture tBlack;
 	
-	public MainMenuScreen(Project game) {
+	public GameoverMenuScreen(Project game) {
 		this.game = game;
 		
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
 		
 		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
 		
-		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
-		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		brestart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		bmenu = new Button(CAM_WIDTH * 3 / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class));
 		
-		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
-		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
+		brestart.setX(brestart.getX() - brestart.getWidth() / 2);
+		brestart.setY(brestart.getY() - brestart.getHeight() / 2);
 		
-		bcredits.setX(bcredits.getX() - bcredits.getWidth() / 2);
-		bcredits.setY(bcredits.getY() - bcredits.getHeight() / 2);
+		bmenu.setX(bmenu.getX() - bmenu.getWidth() / 2);
+		bmenu.setY(bmenu.getY() - bmenu.getHeight() / 2);
 		
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
@@ -61,19 +61,19 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
 		
-		if(!bstart.isPressed())
-			game.spritebatch.draw(bstart.getTexture(), bstart.getX(), bstart.getY(), bstart.getWidth(), bstart.getHeight());
+		if(!brestart.isPressed())
+			game.spritebatch.draw(brestart.getTexture(), brestart.getX(), brestart.getY(), brestart.getWidth(), brestart.getHeight());
 		else {
-			game.spritebatch.draw(tBlack, bstart.getX() - 1, bstart.getY() - 2, bstart.getWidth() + 2, bstart.getHeight() + 4);
-			game.spritebatch.draw(bstart.getTexture(), bstart.getX() + 2, bstart.getY() + 1, bstart.getWidth() - 4, bstart.getHeight() - 2);
+			game.spritebatch.draw(tBlack, brestart.getX() - 1, brestart.getY() - 2, brestart.getWidth() + 2, brestart.getHeight() + 4);
+			game.spritebatch.draw(brestart.getTexture(), brestart.getX() + 2, brestart.getY() + 1, brestart.getWidth() - 4, brestart.getHeight() - 2);
 		}
 		
 		
-		if(!bcredits.isPressed())
-			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX(), bcredits.getY(), bcredits.getWidth(), bcredits.getHeight());
+		if(!bmenu.isPressed())
+			game.spritebatch.draw(bmenu.getTexture(), bmenu.getX(), bmenu.getY(), bmenu.getWidth(), bmenu.getHeight());
 		else {
-			game.spritebatch.draw(tBlack, bcredits.getX() - 1, bcredits.getY() - 2, bcredits.getWidth() + 2, bcredits.getHeight() + 4);
-			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX() + 2, bcredits.getY() + 1, bcredits.getWidth() - 4, bcredits.getHeight() - 2);
+			game.spritebatch.draw(tBlack, bmenu.getX() - 1, bmenu.getY() - 2, bmenu.getWidth() + 2, bmenu.getHeight() + 4);
+			game.spritebatch.draw(bmenu.getTexture(), bmenu.getX() + 2, bmenu.getY() + 1, bmenu.getWidth() - 4, bmenu.getHeight() - 2);
 		}
 		game.spritebatch.end();
 	}
@@ -81,10 +81,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(button == Input.Buttons.LEFT) {
-			if(bcredits.onPress(screenX, screenY))
-				bcredits.setPressed(true);
-			if(bstart.onPress(screenX, screenY))
-				bstart.setPressed(true);
+			if(bmenu.onPress(screenX, screenY))
+				bmenu.setPressed(true);
+			if(brestart.onPress(screenX, screenY))
+				brestart.setPressed(true);
 			
 			
 			return true;
@@ -96,22 +96,22 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-	      if(bcredits.onPress(screenX, screenY)) {
-		        game.screenmanager.push(new CreditsScreen(game));
-	      }
-	      if(bstart.onPress(screenX, screenY)) {
-	        	game.screenmanager.push(new GameScreen(game));
-	      }
-	          bstart.setPressed(false);
-	          bcredits.setPressed(false);
+	          if(bmenu.onPress(screenX, screenY)) {
+	        	bmenu.setPressed(false);
+		        game.screenmanager.pop();
+		      }
+	          if(brestart.onPress(screenX, screenY)) {
+		        brestart.setPressed(false);
+	        	game.screenmanager.set(new GameScreen(game));
+	          }
 	          return true;     
 	      }
 	      return false;
 	}
 
 	public static void prefetch(AssetManager m) {
-		m.load(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class);
-		m.load(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class);
+		m.load(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class);
+		m.load(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class);
 		m.load(BACKGROUND_ASSET_PATH, Texture.class);
 		m.load(TEXTURE_BLACK_PATH, Texture.class);
 	}
@@ -138,8 +138,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
-		game.assetmanager.unload(STARTBUTTON_TEXTURE_ASSET_PATH);
-		game.assetmanager.unload(CREDITSBUTTON_TEXTURE_ASSET_PATH);
+		game.assetmanager.unload(RESTARTBUTTON_TEXTURE_ASSET_PATH);
+		game.assetmanager.unload(MENUBUTTON_TEXTURE_ASSET_PATH);
 		game.assetmanager.unload(BACKGROUND_ASSET_PATH);
 		game.assetmanager.unload(TEXTURE_BLACK_PATH);
 		
