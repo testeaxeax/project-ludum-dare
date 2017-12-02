@@ -47,7 +47,7 @@ public class Sun {
 			// TODO uncomment once implemented
 			//game.gameover();
 		} else {
-			rotation = (int) ((rotation + deltarotation * delta) % 360);
+			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
 			pos.x = (int) (origin.x + Math.cos(degree) * radius);
 			pos.y = (int) (origin.y + Math.sin(degree) * radius);
