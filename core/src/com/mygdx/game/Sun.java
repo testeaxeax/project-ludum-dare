@@ -9,8 +9,6 @@ public class Sun {
 	private static final String SUN_TEXTURE_PATH = "graphics/sun_texture.png";
 	
 	private static int MAX_TEMP = 100;
-	public static int WIDTH = 400;
-	public static int HEIGHT = 400;
 	
 	private Vector2 pos;
 	private Vector2 origin;
@@ -25,7 +23,7 @@ public class Sun {
 	private Texture sun_texture;
 	
 
-	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltatemp, int deltarotation) {
+	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltarotation, int deltatemp) {
 		int x;
 		int y;
 		
@@ -33,7 +31,7 @@ public class Sun {
 		this.sun_radius = sun_radius;
 		this.rotation = 0;
 		this.deltarotation = deltarotation;
-		this.deltatemp = deltatemp;
+		this.deltatemp = deltarotation;
 		this.origin = new Vector2(x_origin, y_origin);
 		x = (int) (origin.x + Math.cos(degree) * this.radius);
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
@@ -86,7 +84,7 @@ public class Sun {
 		case 3:
 			blast_degree = 270 + rotation;
 		}
-		blast_degree += rotation;
+		
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
 		blast_pos.y = (int) (pos.y + Math.cos(blast_degree) * sun_radius);
 		return blast_pos;

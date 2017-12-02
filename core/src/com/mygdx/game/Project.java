@@ -8,7 +8,7 @@ public class Project extends Game {
 	
 	// Globally used constants
 	public static final int SCREEN_HEIGHT = 800;
-	public static final int SCREEN_WIDTH = 1024;
+	public static final int SCREEN_WIDTH = 800;
 	
 	// Globally used variables required for management and rendering
 	public SpriteBatch spritebatch;
