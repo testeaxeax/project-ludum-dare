@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public final class GameScreen implements Screen {
@@ -37,7 +38,13 @@ public final class GameScreen implements Screen {
 	private static final int PLANET_TEXTURES = 7;
 	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
 	
+	private ArrayList<Explosion> explosions;
+	
 	private double raydelta;
+	
+	private int score = 0;
+	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
+	private GlyphLayout scoreLayout;
 	
 	public GameScreen(Project game) {
 		this.game = game;
@@ -69,6 +76,11 @@ public final class GameScreen implements Screen {
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		
 		this.raydelta = 250d;
+		
+		scoreLayout = new GlyphLayout();
+		
+		Explosion.setup(game.assetmanager);
+		this.explosions = new ArrayList<Explosion>();
 	}
 
 	@Override
@@ -104,6 +116,18 @@ public final class GameScreen implements Screen {
 		int sun_width = sun.getSun_texture().getWidth();
 		int sun_height = sun.getSun_texture().getHeight();
 		
+		// Render Explosions
+		for(int i = this.explosions.size() - 1; i >= 0; i--) {
+			Explosion e = this.explosions.get(i);
+			Texture t = e.getTexture(delta);
+			
+			if(t != null)
+				game.spritebatch.draw(t, e.getX(), e.getY(), e.getRadius(), e.getRadius());
+			else
+				this.explosions.remove(i);
+		}
+		
+		
 		// Render rays
 		if(this.raydelta < 180) {
 			float size_shaft = 3 + 7f * (float) Math.sin(this.raydelta / 180d * Math.PI);
@@ -131,6 +155,9 @@ public final class GameScreen implements Screen {
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), (pb.getHeight() - 2*x) * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
 		
+		scoreLayout.setText(game.font, "Score: "  + score);
+		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
+		
 		game.spritebatch.end();
 	}
 
@@ -146,6 +173,8 @@ public final class GameScreen implements Screen {
 			}
 		}
 		for(Planet p : toRemove) {
+			this.explosions.add(new Explosion(p));
+			p.destroy();
 			planets.remove(p);
 		}
 	}
@@ -175,6 +204,8 @@ public final class GameScreen implements Screen {
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		m.load(SR_SHAFT, Texture.class);
+		
+		Explosion.load(m);
 	}
 	
 	@Override
