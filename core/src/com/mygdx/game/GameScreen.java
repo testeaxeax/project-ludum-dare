@@ -23,6 +23,10 @@ public final class GameScreen implements Screen {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 	}
 
+	public Project getGame() {
+		return game;
+	}
+
 	@Override
 	public void show() {
 		
