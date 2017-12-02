@@ -20,6 +20,12 @@ public final class GameScreen implements Screen {
 	private static final int PLANET_TEXTURES = 7;
 	private Texture[] tAPlanets;
 	private static final String PLANETS_TEXTURE_PATH = "graphics/planets/planetx.png";
+  
+	private ProgressBar pb;
+	private Texture pbBorder;
+	private Texture pbInfill;
+	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
+	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
 	
 	private ArrayList<Planet> planets;
 	
@@ -36,8 +42,19 @@ public final class GameScreen implements Screen {
 		
 		this.planets = PlanetManager.setupPlanets(10, this);
 		
+		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
+		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
+		
+		
+		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
+		pb.setPercentage(0.2f);
+    
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+	}
+
+	public Project getGame() {
+		return game;
 	}
 
 	@Override
@@ -61,10 +78,13 @@ public final class GameScreen implements Screen {
 	public static void prefetch(AssetManager m) {
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
+      m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
+		  m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
 	}
 	
 	public Texture[] getPlanetTextures() {
 		return this.tAPlanets;
+		
 	}
 	
 	@Override
@@ -89,6 +109,9 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		game.assetmanager.unload(PB_BORDER_TEXTURE_PATH);
+		game.assetmanager.unload(PB_INFILL_TEXTURE_PATH);
+    
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
 	}
