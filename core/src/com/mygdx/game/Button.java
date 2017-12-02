@@ -20,4 +20,34 @@ public class Button {
 	public boolean onPress(float mouseX, float mouseY) {
 		return mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height; 
 	}
+
+
+
+	public float getX() {
+		return x;
+	}
+
+
+
+	public float getY() {
+		return y;
+	}
+
+
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+
+
+	public float getWidth() {
+		return width;
+	}
+
+
+
+	public float getHeight() {
+		return height;
+	}
 }
