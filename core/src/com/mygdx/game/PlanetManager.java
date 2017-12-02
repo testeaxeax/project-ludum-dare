@@ -13,7 +13,7 @@ public class PlanetManager {
 	public static ArrayList<Planet> setupPlanets(int count, GameScreen screen) {
 		Texture[] textures = screen.getPlanetTextures();
 		
-		ArrayList<Planet> planets = new ArrayList<Planet>();
+		ArrayList<Planet> planets;
 		
 		// Planet init, creates -count- planets
 		planets  = new ArrayList<Planet>();
