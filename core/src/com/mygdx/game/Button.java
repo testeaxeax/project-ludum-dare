@@ -18,6 +18,7 @@ public class Button {
 	
 	
 	public boolean onPress(float mouseX, float mouseY) {
+		mouseY = Project.SCREEN_HEIGHT - mouseY;
 		return mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height;
 	}
 

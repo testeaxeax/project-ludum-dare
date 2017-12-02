@@ -26,7 +26,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public MainMenuScreen(Project game) {
 		this.game = game;
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
-		bstart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 4, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
 		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class));
 		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
 		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
@@ -119,8 +119,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		  		dispose();
 		      }
 	          if(bstart.onPress(screenX, screenY)) {
-	        	game.screenmanager.set(new GameScreen(game));
-	  			dispose();
+//	        	game.screenmanager.set(new GameScreen(game));
+//	  			dispose();
 	          }
 	          return true;     
 	      }
