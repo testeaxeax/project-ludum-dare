@@ -19,6 +19,7 @@ public class Sun {
 	private int deltatemp;
 	private int sun_radius;
 	private int rotation;
+	private int deltarotation;
 	private Texture sun_texture;
 	
 
@@ -44,6 +45,7 @@ public class Sun {
 			// TODO uncomment once implemented
 			//game.gameover();
 		} else {
+			rotation += deltarotation * delta;
 			degree = (degree + speed * delta) % 360;
 			pos.x = (int) (origin.x + Math.cos(degree) * radius);
 			pos.y = (int) (origin.y + Math.sin(degree) * radius);
@@ -69,16 +71,16 @@ public class Sun {
 		
 		switch (blast_index){
 		case 0:
-			blast_degree = 0;
+			blast_degree = 0 + rotation;
 			break;
 		case 1:
-			blast_degree = 90;
+			blast_degree = 90 + rotation;
 			break;
 		case 2:
-			blast_degree = 180;
+			blast_degree = 180 + rotation;
 			break;
 		case 3:
-			blast_degree = 270;
+			blast_degree = 270 + rotation;
 		}
 		
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
@@ -86,6 +88,14 @@ public class Sun {
 		return blast_pos;
 	}
 	
+	public int getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
 	public int getRotation() {
 		return rotation;
 	}
