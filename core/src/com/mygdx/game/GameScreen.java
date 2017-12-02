@@ -15,6 +15,7 @@ public final class GameScreen implements Screen {
 	private Project game;
 	private OrthographicCamera cam;
 	
+	private Sun sun;
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
@@ -35,7 +36,8 @@ public final class GameScreen implements Screen {
 		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
-		pb.setPercentage(0.2f);
+		sun = new Sun(this, 400, 400, 0, 100, 0, 30);
+
 	}
 
 	public Project getGame() {
@@ -50,12 +52,22 @@ public final class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
+		// Render progress bar
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
+		// Render Sun
+		int sun_width = sun.getSun_texture().getWidth();
+		int sun_height = sun.getSun_texture().getHeight();
+		sun.update(delta);
+		game.spritebatch.draw (sun.getSun_texture(), (float) sun.getPos().x - sun_width / 2,
+				(float) sun.getPos().y - sun_height / 4, (float) sun_width / 2, (float) sun_height / 2,
+				(float) sun_width, (float) sun_height, 1, 1, (float) sun.getRotation(), 0, 0, (int) sun_width,
+				(int) sun_height, false, false);
 		game.spritebatch.end();
 	}
 
 	public static void prefetch(AssetManager m) {
+		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
 	}
