@@ -36,7 +36,7 @@ public final class GameScreen implements Screen {
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
 		pb.setPercentage(0.5f);
-		sun = new Sun(this, 400, 400, 0, 100);
+		sun = new Sun(this, 400, 400, 0, 100, 0, 30);
 	}
 
 	public Project getGame() {
@@ -56,10 +56,13 @@ public final class GameScreen implements Screen {
 		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
 		// Render Sun
-		int sun_width = Sun.WIDTH;
-		int sun_height = Sun.HEIGHT;
-		game.spritebatch.draw (sun.getSun_texture(), (float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 2, (float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 2, (float) Sun.WIDTH, (float) Sun.HEIGHT, 1,
-				1, (float) sun.getRotation(), 0, 0, (int) Sun.WIDTH, (int) Sun.HEIGHT, false, false);
+		int sun_width = sun.getSun_texture().getWidth();
+		int sun_height = sun.getSun_texture().getHeight();
+		sun.update(delta);
+		game.spritebatch.draw (sun.getSun_texture(), (float) sun.getPos().x - sun_width / 2,
+				(float) sun.getPos().y - sun_height / 4, (float) sun_width / 2, (float) sun_height / 2,
+				(float) sun_width, (float) sun_height, 1, 1, (float) sun.getRotation(), 0, 0, (int) sun_width,
+				(int) sun_height, false, false);
 		game.spritebatch.end();
 	}
 

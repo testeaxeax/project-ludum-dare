@@ -19,16 +19,19 @@ public class Sun {
 	private int deltatemp;
 	private int sun_radius;
 	private int rotation;
+	private int deltarotation;
 	private Texture sun_texture;
 	
 
-	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius) {
+	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltatemp, int deltarotation) {
 		int x;
 		int y;
 		
 		this.radius = radius;
 		this.sun_radius = sun_radius;
 		this.rotation = 0;
+		this.deltarotation = deltarotation;
+		this.deltatemp = deltatemp;
 		this.origin = new Vector2(x_origin, y_origin);
 		x = (int) (origin.x + Math.cos(degree) * this.radius);
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
@@ -38,12 +41,13 @@ public class Sun {
 		sun_texture = gamescreen.getGame().assetmanager.get("graphics/sun_texture.png", Texture.class);
 	}
 	
-	public void update(int delta) {
+	public void update(float delta) {
 		temp += deltatemp * delta;
 		if(temp > MAX_TEMP) {
 			// TODO uncomment once implemented
 			//game.gameover();
 		} else {
+			rotation = (int) ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
 			pos.x = (int) (origin.x + Math.cos(degree) * radius);
 			pos.y = (int) (origin.y + Math.sin(degree) * radius);
@@ -80,7 +84,7 @@ public class Sun {
 		case 3:
 			blast_degree = 270;
 		}
-		
+		blast_degree += rotation;
 		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
 		blast_pos.y = (int) (pos.y + Math.cos(blast_degree) * sun_radius);
 		return blast_pos;
