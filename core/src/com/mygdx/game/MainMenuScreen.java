@@ -50,7 +50,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		this.mesh = new BackgroundMesh(game);
 		
 		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(200f / 255f, 200f / 255f, 200f / 255f, 1f);
 	}
 
 	@Override
