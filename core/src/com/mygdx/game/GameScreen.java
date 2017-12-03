@@ -91,7 +91,7 @@ public final class GameScreen implements Screen {
 		this.warned_before = false;
 		
 		
-		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
+		pb = new ProgressBar(60, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 60, 0, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
 		
 		this.planetTextures = new Texture[PLANET_TEXTURES];
