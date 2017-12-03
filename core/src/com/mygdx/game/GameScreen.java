@@ -98,7 +98,7 @@ public final class GameScreen implements Screen {
 		
 		this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
 		
-		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 1);
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 2);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		
 		this.raydelta = 250d;
@@ -263,8 +263,6 @@ public final class GameScreen implements Screen {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
 		Vector2 rel = sun.getPos();
 		
-		
-		
 		rayPol.rotate(360 - sun.getRotation());
 		
 		r.polygon(rayPol.getTransformedVertices());
@@ -277,7 +275,6 @@ public final class GameScreen implements Screen {
 			for(Planet p : toRemove)
 				this.planets.remove(p);
 		}
-		
 		rayPol.rotate(90);
 		
 		if(this.shoot) {
