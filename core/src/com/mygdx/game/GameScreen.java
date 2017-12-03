@@ -92,10 +92,10 @@ public final class GameScreen implements Screen {
 		Explosion.setup(game.assetmanager);
 		this.explosions = new ArrayList<Explosion>();
 		
-		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
-		music.setLooping(true);
-		music.setVolume(0.1f);		
-		music.play();
+//		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
+//		music.setLooping(true);
+//		music.setVolume(0.1f);		
+//		music.play();
 		
 		this.start = 0l;
 	}
@@ -153,7 +153,7 @@ public final class GameScreen implements Screen {
 		
 		// Render rays
 		if(this.raydelta < 180) {
-			float size_shaft = 3 + 7f * (float) Math.sin(this.raydelta / 180d * Math.PI);
+			float size_shaft = 5 + 5f * (float) Math.sin(this.raydelta / 180d * Math.PI);
 			game.spritebatch.draw(texture_sunray_shaft, (float) -Project.SCREEN_WIDTH / 2 - sun_width / 2, sun.getPos().y - size_shaft / 2f + sun_height / 4f, 
 					Project.SCREEN_WIDTH / 2 + sun.getPos().x + sun_width / 2, size_shaft / 2f, 
 					 2f * (float)Project.SCREEN_WIDTH, size_shaft, 
