@@ -24,6 +24,7 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	private Button bmenu;
 	private Texture background;
 	private Texture tBlack;
+	private BackgroundMesh mesh;
 	
 	public GameoverMenuScreen(Project game) {
 		this.game = game;
@@ -44,6 +45,7 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
+		this.mesh = new BackgroundMesh(game);
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -56,11 +58,18 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
+		float x = Gdx.input.getX();
+		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
+		
+		this.mesh.update(delta, x, y);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
-		
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
+		game.spritebatch.end();
 		
+		this.mesh.render(delta, cam);
+		
+		game.spritebatch.begin();
 		if(!brestart.isPressed())
 			game.spritebatch.draw(brestart.getTexture(), brestart.getX(), brestart.getY(), brestart.getWidth(), brestart.getHeight());
 		else {
