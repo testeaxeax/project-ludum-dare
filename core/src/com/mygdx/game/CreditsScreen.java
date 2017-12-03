@@ -22,7 +22,6 @@ public final class CreditsScreen implements Screen {
 	private Texture background;
 	private GlyphLayout layout;
 	private long last_touched;
-	private BackgroundMesh mesh;
 	
 	public CreditsScreen(Project game) {
 		this.game = game;
@@ -30,7 +29,6 @@ public final class CreditsScreen implements Screen {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
-		this.mesh = new BackgroundMesh(game);
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		layout = new GlyphLayout();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -47,7 +45,7 @@ public final class CreditsScreen implements Screen {
 		float x = Gdx.input.getX();
 		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
 		
-		this.mesh.update(delta, x, y);
+		MainMenuScreen.mesh.update(delta, x, y);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(last_touched) > 500) {
 			last_touched = TimeUtils.millis();
@@ -59,7 +57,7 @@ public final class CreditsScreen implements Screen {
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0 , Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		game.spritebatch.end();
-		this.mesh.render(delta, cam);
+		MainMenuScreen.mesh.render(delta, cam);
 		game.spritebatch.begin();
 		game.font.draw(game.spritebatch, layout, position.x, position.y);
 		game.spritebatch.end();
