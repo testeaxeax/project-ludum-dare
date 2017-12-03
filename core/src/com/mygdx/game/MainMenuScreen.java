@@ -25,6 +25,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private Texture background;
 	private Texture tBlack;
 	
+	private BackgroundMesh mesh;
+	
 	public MainMenuScreen(Project game) {
 		this.game = game;
 		
@@ -32,8 +34,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		
 		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
 		
-		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
-		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
 		
 		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
 		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
@@ -44,8 +46,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
-		game.spritebatch.setProjectionMatrix(cam.combined);
 		
+		this.mesh = new BackgroundMesh(game);
+		
+		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 	}
 
@@ -55,11 +59,25 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void render(float delta) {		
+		float x = Gdx.input.getX();
+		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
+		
+		this.mesh.update(delta, x, y);
+		
+		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		
 		game.spritebatch.begin();
 		
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
+		
+		game.spritebatch.end();
+		
+		this.mesh.render(delta, cam);
+
+		game.spritebatch.begin();
 		
 		if(!bstart.isPressed())
 			game.spritebatch.draw(bstart.getTexture(), bstart.getX(), bstart.getY(), bstart.getWidth(), bstart.getHeight());
@@ -81,9 +99,9 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(button == Input.Buttons.LEFT) {
-			if(bcredits.onPress(screenX, screenY))
+			if(bcredits.onPress(screenX, screenY, true))
 				bcredits.setPressed(true);
-			if(bstart.onPress(screenX, screenY))
+			if(bstart.onPress(screenX, screenY, true))
 				bstart.setPressed(true);
 			
 			
@@ -96,10 +114,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-	      if(bcredits.onPress(screenX, screenY)) {
+	      if(bcredits.onPress(screenX, screenY, false)) {
 		        game.screenmanager.push(new CreditsScreen(game));
 	      }
-	      if(bstart.onPress(screenX, screenY)) {
+	      if(bstart.onPress(screenX, screenY, false)) {
 	        	game.screenmanager.push(new GameScreen(game));
 	      }
 	          bstart.setPressed(false);

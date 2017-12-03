@@ -75,8 +75,4 @@ public class Planet{
 	public float getY() {
 		return y;
 	}
-	
-	public void destroy() {
-		this.screen.getGame().assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
-	}
 }

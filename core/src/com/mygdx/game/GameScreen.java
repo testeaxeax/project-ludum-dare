@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -47,7 +49,14 @@ public final class GameScreen implements Screen {
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
 	private GlyphLayout scoreLayout;
 	
+	private Music music;
+	
+	private long start;
+	private boolean started;
+	
 	public GameScreen(Project game) {
+		this.started = false;
+		
 		this.game = game;
 		
 		cam = new OrthographicCamera();
@@ -82,6 +91,13 @@ public final class GameScreen implements Screen {
 		
 		Explosion.setup(game.assetmanager);
 		this.explosions = new ArrayList<Explosion>();
+		
+		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
+		music.setLooping(true);
+		music.setVolume(0.1f);		
+		music.play();
+		
+		this.start = 0l;
 	}
 
 	@Override
@@ -92,11 +108,17 @@ public final class GameScreen implements Screen {
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
 		
-		if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
-			this.raydelta = 0d;
-			sun.decreasetemp(3);
-			rayHitsPlanets();
-		}
+		if(this.started) {
+			if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
+				this.raydelta = 0d;
+				sun.decreasetemp(3);
+				if(rayHitsPlanets())
+					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
+				else
+					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+			}
+		} else 
+			this.started = System.currentTimeMillis() - this.start > 300;
 		
 		
 		sun.update(delta, this.raydelta <= 180);
@@ -108,9 +130,6 @@ public final class GameScreen implements Screen {
 		
 		//BACKGROUND has to be drawn FIRST!!
 		game.spritebatch.draw(background, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
-		// Render progress bar
-		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getPercentage());
-		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
 		
 		// Render planets
 		for(Planet p : this.planets)
@@ -166,7 +185,7 @@ public final class GameScreen implements Screen {
 	}
 
 	
-	private void rayHitsPlanets() {
+	private boolean rayHitsPlanets() {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
 		for(int i = 0; i < 4; i++) {
 			for(Planet p : planets) {
@@ -178,9 +197,10 @@ public final class GameScreen implements Screen {
 		}
 		for(Planet p : toRemove) {
 			this.explosions.add(new Explosion(p));
-			p.destroy();
 			planets.remove(p);
 		}
+		
+		return toRemove.size() > 0;
 	}
 	
 	
@@ -199,6 +219,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
+		this.start = System.currentTimeMillis();
 	}
 
 	public static void prefetch(AssetManager m) {

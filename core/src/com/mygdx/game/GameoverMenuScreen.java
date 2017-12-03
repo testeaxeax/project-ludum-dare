@@ -32,8 +32,8 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		
 		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
 		
-		brestart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class));
-		bmenu = new Button(CAM_WIDTH * 3 / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class));
+		brestart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		bmenu = new Button(CAM_WIDTH * 3 / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
 		
 		brestart.setX(brestart.getX() - brestart.getWidth() / 2);
 		brestart.setY(brestart.getY() - brestart.getHeight() / 2);
@@ -81,9 +81,9 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(button == Input.Buttons.LEFT) {
-			if(bmenu.onPress(screenX, screenY))
+			if(bmenu.onPress(screenX, screenY, true))
 				bmenu.setPressed(true);
-			if(brestart.onPress(screenX, screenY))
+			if(brestart.onPress(screenX, screenY,true))
 				brestart.setPressed(true);
 			
 			
@@ -96,12 +96,12 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-	          if(bmenu.onPress(screenX, screenY)) {
+			if(bmenu.onPress(screenX, screenY, false)) {
 	        	bmenu.setPressed(false);
-		        game.screenmanager.pop();
-		      }
-	          if(brestart.onPress(screenX, screenY)) {
-		        brestart.setPressed(false);
+	        	game.screenmanager.pop();
+		    }
+	        if(brestart.onPress(screenX, screenY, false)) {
+	        	brestart.setPressed(false);
 	        	game.screenmanager.set(new GameScreen(game));
 	          }
 	          return true;     
