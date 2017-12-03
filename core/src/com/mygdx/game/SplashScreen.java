@@ -81,7 +81,6 @@ public final class SplashScreen implements Screen {
 		if (TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && loaded) {
 			// TODO replace ScreenTemplate with actual game/menu screen
 			game.screenmanager.set(new MainMenuScreen(game));
-			dispose();
 		}
 	}
 
