@@ -56,11 +56,18 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
+		float x = Gdx.input.getX();
+		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
+		
+		MainMenuScreen.mesh.update(delta, x, y);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
-		
 		game.spritebatch.draw(background, 0, 0, CAM_WIDTH, CAM_HEIGHT);
+		game.spritebatch.end();
 		
+		MainMenuScreen.mesh.render(delta, cam);
+		
+		game.spritebatch.begin();
 		if(!brestart.isPressed())
 			game.spritebatch.draw(brestart.getTexture(), brestart.getX(), brestart.getY(), brestart.getWidth(), brestart.getHeight());
 		else {
