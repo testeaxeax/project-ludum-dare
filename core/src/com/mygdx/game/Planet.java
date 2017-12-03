@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Planet{
@@ -13,6 +14,8 @@ public class Planet{
 	private Texture texture;
 	private GameScreen screen;
 	
+	private Circle shape;
+	
 	public Planet(GameScreen screen, ArrayList<Planet> planets, Texture texture) {
 		this.texture = texture;
 		this.screen = screen;
@@ -21,7 +24,7 @@ public class Planet{
 		
 		this.setup(planets);
 		
-		
+		this.shape = new Circle(this.pos.x + this.radius, this.pos.y + this.radius, this.radius);
 	}
 	
 	private void setup(ArrayList<Planet> planets) {
@@ -65,5 +68,9 @@ public class Planet{
 
 	public Vector2 getPos() {
 		return this.pos;
+	}
+	
+	public Circle getShape() {
+		return this.shape;
 	}
 }
