@@ -3,6 +3,7 @@ package com.mygdx.game;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -45,10 +46,16 @@ public class Project extends Game {
 	
 	public void loadSounds() {
 		assetmanager.load("audio/sounds/planet_vanish.wav", Sound.class);
+		assetmanager.load("audio/sounds/beam.wav", Sound.class);
+		assetmanager.load("audio/sounds/click.wav", Sound.class);
+		
+		assetmanager.load("audio/music/music.ogg", Music.class);
 	}
 	
 	@Override
 	public void dispose() {
+		assetmanager.unload("audio/sounds/planet_vanish.wav");
+		
 		screenmanager.dispose();
 		spritebatch.dispose();
 		assetmanager.dispose();

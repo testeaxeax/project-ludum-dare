@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Button {
@@ -7,8 +8,9 @@ public class Button {
 	private Texture texture;
 	
 	private boolean pressed;
+	private Project game;
 	
-	public Button(float x, float y, float width, float height, Texture texture) {
+	public Button(float x, float y, float width, float height, Texture texture, Project game) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -16,11 +18,18 @@ public class Button {
 		this.texture = texture;
 		
 		this.pressed = false;
+		
+		this.game = game;
 	}
 	
-	public boolean onPress(float mouseX, float mouseY) {
+	public boolean onPress(float mouseX, float mouseY, boolean down) {
 		mouseY = Project.SCREEN_HEIGHT - mouseY;
-		return mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height;
+		boolean ret = mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height;
+		
+		if(down && ret)
+			game.assetmanager.get("audio/sounds/click.wav", Sound.class).play(0.1f);
+		
+		return ret;
 	}
 
 	public float getX() {
