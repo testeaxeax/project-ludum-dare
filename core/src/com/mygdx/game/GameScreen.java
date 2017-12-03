@@ -281,8 +281,10 @@ public final class GameScreen implements Screen {
 		
 		if(this.shoot) {
 			for(Planet p : this.planets)
-				if(overlaps(rayPol, p.getShape()) && !toRemove.contains(p))
-					toRemove.add(p);
+				if(overlaps(rayPol, p.getShape()) && !toRemove.contains(p)) {
+						toRemove.add(p);
+						score++;
+					}
 			
 			for(Planet p : toRemove)
 				this.planets.remove(p);
