@@ -74,6 +74,8 @@ public class Sun {
 		Vector2 blast_pos = new Vector2();
 		int blast_degree = 0;
 		
+		rotation = rotation % 360;
+		
 		switch (blast_index){
 		case 0:
 			blast_degree = (int) (0 + rotation);
@@ -87,9 +89,9 @@ public class Sun {
 		case 3:
 			blast_degree = (int) (270 + rotation);
 		}
-		blast_degree += rotation;
-		blast_pos.x = (int) (pos.x + Math.cos(blast_degree) * sun_radius);
-		blast_pos.y = (int) (pos.y + Math.cos(blast_degree) * sun_radius);
+
+		blast_pos.x = (float) (Math.cos(2 * Math.PI - Math.toRadians(blast_degree)) * sun_radius);
+		blast_pos.y = (float) (Math.sin(2 * Math.PI - Math.toRadians(blast_degree)) * sun_radius);
 		return blast_pos;
 	}
 	

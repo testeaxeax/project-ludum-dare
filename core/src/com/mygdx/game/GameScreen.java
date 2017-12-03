@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.BackgroundMesh.Particle;
 
 public final class GameScreen implements Screen {
 	
@@ -127,10 +128,11 @@ public final class GameScreen implements Screen {
 			if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
 				this.raydelta = 0d;
 				sun.decreasetemp(3);
-				if(rayHitsPlanets())
-					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
-				else
-					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+				// TODO: uncomment
+//				if(rayHitsPlanets())
+//					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
+//				else
+//					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
 			}
 		} else 
 			this.started = System.currentTimeMillis() - this.start > 300;
@@ -148,7 +150,7 @@ public final class GameScreen implements Screen {
 		
 		// Render planets
 		for(Planet p : this.planets)
-			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
+			this.game.spritebatch.draw(p.getRegion(), p.getPos().x, p.getPos().y, p.getRadius() * 2, p.getRadius() * 2);
 		
 
 		int sun_width = sun.getSunRadius();
@@ -176,21 +178,36 @@ public final class GameScreen implements Screen {
 			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
 					length / 2f + sun_width / 2, size_shaft / 2f, 
 					length, size_shaft, 
-					1f, 1f, sun.getRotation());
+					1f, 1f, 360f - sun.getRotation());
 			
 			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
 					length / 2f + sun_width / 2, size_shaft / 2f, 
 					length, size_shaft, 
-					1f, 1f, sun.getRotation() + 90f);
+					1f, 1f, 360f - sun.getRotation() + 90f);
+			
 		}
 		
 		// Render Sun
 		game.spritebatch.draw (sun.getSun_texture(), 
 				(float) sun.getPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getPos().y - sun.getSun_texture().getHeight() / 2, 
 				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
-				(float) sun.getRotation(), 
+				360f - sun.getRotation(), 
 				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
 				false, false);
+		
+//		 Debug
+		game.spritebatch.end();
+		ShapeRenderer sr = new ShapeRenderer();
+		
+		sr.setColor(Color.RED);
+		sr.setProjectionMatrix(cam.combined);
+		sr.begin(ShapeType.Line);
+		
+		rayHitsPlanets(sr);
+		
+		sr.end();
+		
+		game.spritebatch.begin();
 		
 		// Render warning
 		if(this.sun.getTemp() / Sun.MAX_TEMP > 0.8f) {
@@ -223,50 +240,46 @@ public final class GameScreen implements Screen {
 		scoreLayout.setText(game.font, "Score: "  + score);
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
-		
-		ShapeRenderer sr = new ShapeRenderer();
-		sr.setColor(Color.WHITE);
-		sr.setProjectionMatrix(cam.combined);
-		//draws lines from sunpos to planets (calculated by angles)
-		
-		sr.begin(ShapeType.Line);
-		Vector2 rel = sun.getPos();
-		for(Planet p : planets) {
-			sr.line(rel.x, rel.y, rel.x +  100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), rel.y + 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
-			
-		}
-		sr.end();
-		
 		game.spritebatch.end();
 	}
 
 	
-	private boolean rayHitsPlanets() {
+	private boolean rayHitsPlanets(ShapeRenderer r) {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
 		Vector2 rel = sun.getPos();
+		Vector2 ray;
+		int count = 0;
 		
-		
-		
-		rel = new Vector2(rel.x + sun.getSunRadius()/2, rel.y + sun.getSunRadius()/2);
 		for(int i = 0; i < 4; i++) {
-			for(Planet p : planets) {
+			ray = this.sun.getNewblastposition(i).nor();
+			
+			while(rel.x + count * ray.x > 0 && rel.x + count * ray.x < Project.SCREEN_HEIGHT) {
 				
-				if(sun.getRotation() + 90*i > p.getAngleRelative(rel.x, rel.y) -p.getAngularWidth(rel.x, rel.y) &&
-				   sun.getRotation() + 90*i < p.getAngleRelative(rel.x, rel.y) +p.getAngularWidth(rel.x, rel.y )) {
-					toRemove.add(p);
-				}
+				toRemove = checkPlanets(rel.x + count * ray.x, rel.y + count * ray.y, toRemove);
+				
+				count++;
 			}
+			
+			r.line(rel.x, rel.y, rel.x + 500 * ray.x, rel.y + 500 * ray.y);
+			
+			count = 0;
 		}
+		
 		for(Planet p : toRemove) {
+			this.planets.remove(p);
 			this.explosions.add(new Explosion(p));
-			planets.remove(p);
-			score++;
 		}
 		
 		return toRemove.size() > 0;
 	}
 	
-	
+	public ArrayList<Planet> checkPlanets(float x, float y, ArrayList<Planet> array) {
+		for(Planet p : this.planets)
+			if(p.contains(x, y) && !array.contains(p))
+				array.add(p);
+		
+		return array;
+	}
 	
 	public ProgressBar getPB() {
 		return this.pb;

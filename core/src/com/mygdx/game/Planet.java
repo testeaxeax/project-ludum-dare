@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Planet{
 	private float radius;
-	private float x, y;
+	private Vector2 pos;
 	
 	private Texture texture;
 	private GameScreen screen;
@@ -17,47 +17,42 @@ public class Planet{
 		this.texture = texture;
 		this.screen = screen;
 		
-		this.x = 0f;
-		this.y = 0f;
+		this.pos = new Vector2();
 		
 		this.setup(planets);
+		
+		
 	}
 	
 	private void setup(ArrayList<Planet> planets) {
 		this.radius = 10 + Project.RAND.nextFloat() * 25;
+		float x = 0f;
+		float y = 0f;
 		
 		do {
-			this.x = 20 + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_WIDTH - 40 - this.radius * 2) ;
-			this.y = 20 +  + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT - 40 - this.radius * 2);
+			x = 20 + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_WIDTH - 40 - this.radius * 2) ;
+			y = 20 +  + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT - 40 - this.radius * 2);
+			this.pos.set(x, y);
 		} while (!this.checkLocation(planets));
+		
 	}
 	
 	private boolean checkLocation(ArrayList<Planet> planets) {
 		Vector2 mid = new Vector2(Project.SCREEN_HEIGHT / 2f, Project.SCREEN_WIDTH / 2f);
-		Vector2 pos = new Vector2(this.x, this.y);
 		
-		if(pos.dst(mid) < 250f + this.getRadius())
+		if(this.pos.dst(mid) < 250f + this.getRadius())
 			return false;
 		
 		for(Planet p : planets) {
-			Vector2 p1 = new Vector2(p.getX(), p.getY());
-			if(pos.dst(p1) < p.getRadius() + 3f + this.getRadius())
+			if(this.pos.dst(p.pos) < p.getRadius() + 3f + this.getRadius())
 				return false;
 		}
 		
 		return true;
 	}
 	
-	//returns the angle towards some point
-	public float getAngleRelative(float rx, float ry) {
-		float degree = (float) (Math.atan(((ry - (y + radius/2))/(rx - (x + radius/2)))) * (180/Math.PI));
-		return ((x+radius/2) > rx ? 90 + degree : 270 + degree) - 90f;
-	}
-	
-	//calculates the angular width under the view from a given point.
-	public float getAngularWidth(float rx, float ry) {
-		float degree = (float)  (1*Math.atan((this.getRadius()/Math.sqrt(Math.pow(ry - y, 2) + Math.pow(rx - x, 2)))) * (180/Math.PI));
-		return degree;
+	public boolean contains(float x, float y) {
+		return this.pos.dst(x, y) < this.radius;
 	}
 	
 	public float getRadius() {
@@ -68,11 +63,7 @@ public class Planet{
 		return texture;
 	}
 
-	public float getX() {
-		return x;
-	}
-
-	public float getY() {
-		return y;
+	public Vector2 getPos() {
+		return this.pos;
 	}
 }

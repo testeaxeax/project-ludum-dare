@@ -31,8 +31,8 @@ public class PlanetManager {
 		float y = 0f;
 		
 		for(Planet p : planets) {
-			x += p.getX();
-			y += p.getY();
+			x += p.getPos().x;
+			y += p.getPos().y;
 		}
 		
 		// Get the average position to prevent the planets from only being on one side of the screen
