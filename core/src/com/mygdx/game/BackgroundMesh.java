@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,13 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class BackgroundMesh {
 	private static final int PARTICLES = 150;
-
-	private Project game;
+	
 	private ArrayList<Particle> particles;
 	private ArrayList<Particle> inRange;
 	
 	public BackgroundMesh(Project game) {
-		this.game = game;
 		
 		this.particles = new ArrayList<Particle>();
 		this.inRange = new ArrayList<Particle>();
@@ -51,7 +48,7 @@ public class BackgroundMesh {
 		sr.begin(ShapeType.Filled);
 		
 		for(Particle p : this.particles) {
-			sr.circle(p.pos.x, p.pos.y, 2f);;
+			sr.circle(p.pos.x, p.pos.y, p.size);;
 		}
 		
 		sr.end();
@@ -77,7 +74,7 @@ public class BackgroundMesh {
 		public Particle(float x, float y) {
 			this.pos = new Vector2(x, y);
 			
-			this.size = Project.RAND.nextFloat() * 3 + 2;
+			this.size = Project.RAND.nextFloat() + 2;
 			
 			this.vel = new Vector2(Project.RAND.nextFloat() * 50 + 20, Project.RAND.nextFloat() * 30 - 15);
 		}

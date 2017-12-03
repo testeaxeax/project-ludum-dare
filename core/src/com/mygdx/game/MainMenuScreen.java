@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public final class MainMenuScreen implements Screen, InputProcessor {
 	
@@ -17,6 +18,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
 	private static final String TEXTURE_BLACK_PATH = "graphics/black.png";
+	private static final long CLICK_TIMEOUT = 1000;
 	
 	private Project game;
 	private OrthographicCamera cam;
@@ -24,8 +26,9 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private Button bcredits;
 	private Texture background;
 	private Texture tBlack;
+	private long last_click;
 	
-	private BackgroundMesh mesh;
+	public static BackgroundMesh mesh;
 	
 	public MainMenuScreen(Project game) {
 		this.game = game;
@@ -47,14 +50,15 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
 		
-		this.mesh = new BackgroundMesh(game);
+		mesh = new BackgroundMesh(game);
 		
 		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(200f / 255f, 200f / 255f, 200f / 255f, 1f);
 	}
 
 	@Override
 	public void show() {
+		last_click = TimeUtils.millis();
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -63,7 +67,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		float x = Gdx.input.getX();
 		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
 		
-		this.mesh.update(delta, x, y);
+		mesh.update(delta, x, y);
 		
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -75,7 +79,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		
 		game.spritebatch.end();
 		
-		this.mesh.render(delta, cam);
+		mesh.render(delta, cam);
 
 		game.spritebatch.begin();
 		
@@ -98,12 +102,13 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button == Input.Buttons.LEFT) {
+		if(button == Input.Buttons.LEFT && TimeUtils.timeSinceMillis(last_click) > CLICK_TIMEOUT) {
 			if(bcredits.onPress(screenX, screenY, true))
 				bcredits.setPressed(true);
+			    last_click = TimeUtils.millis();
 			if(bstart.onPress(screenX, screenY, true))
 				bstart.setPressed(true);
-			
+			    last_click = TimeUtils.millis();
 			
 			return true;
 		}

@@ -42,6 +42,10 @@ public final class CreditsScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		float x = Gdx.input.getX();
+		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
+		
+		MainMenuScreen.mesh.update(delta, x, y);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(last_touched) > 500) {
 			last_touched = TimeUtils.millis();
@@ -52,6 +56,9 @@ public final class CreditsScreen implements Screen {
 		Vector2 position = new Vector2(Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2);
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0 , Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+		game.spritebatch.end();
+		MainMenuScreen.mesh.render(delta, cam);
+		game.spritebatch.begin();
 		game.font.draw(game.spritebatch, layout, position.x, position.y);
 		game.spritebatch.end();
 	}
