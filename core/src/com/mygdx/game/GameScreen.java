@@ -88,7 +88,7 @@ public final class GameScreen implements Screen {
 		
 		this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
 		
-		sun = new Sun(this, CAM_WIDTH / 2, CAM_HEIGHT / 2, 0, 100, 30, 1);
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 1);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		
 		this.raydelta = 250d;
@@ -158,21 +158,25 @@ public final class GameScreen implements Screen {
 		
 		// Render rays
 		if(this.raydelta < 180) {
-			float size_shaft = 3 + 7f * (float) Math.sin(this.raydelta / 180d * Math.PI);
-			game.spritebatch.draw(texture_sunray_shaft, (float) -Project.SCREEN_WIDTH / 2 - sun_width / 2, sun.getPos().y - size_shaft / 2f + sun_height / 4f, 
-					Project.SCREEN_WIDTH / 2 + sun.getPos().x + sun_width / 2, size_shaft / 2f, 
-					 2f * (float)Project.SCREEN_WIDTH, size_shaft, 
+			float sin = (float) Math.sin(this.raydelta / 180d * Math.PI);
+			
+			float size_shaft = 3 + 7f * sin;
+			float length = Project.SCREEN_WIDTH * 4f * sin;
+			
+			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
+					length / 2f + sun_width / 2, size_shaft / 2f, 
+					length, size_shaft, 
 					1f, 1f, sun.getRotation());
 			
-			game.spritebatch.draw(texture_sunray_shaft, (float) -Project.SCREEN_WIDTH / 2 - sun_width / 2, sun.getPos().y - size_shaft / 2f + sun_height / 4f, 
-					Project.SCREEN_WIDTH / 2 + sun.getPos().x + sun_width / 2, size_shaft / 2f, 
-					 2f * (float)Project.SCREEN_WIDTH, size_shaft, 
+			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
+					length / 2f + sun_width / 2, size_shaft / 2f, 
+					length, size_shaft, 
 					1f, 1f, sun.getRotation() + 90f);
 		}
 		
 		// Render Sun
 		game.spritebatch.draw (sun.getSun_texture(), 
-				(float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 4, 
+				(float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 2, 
 				(float) sun_width / 2, (float) sun_height / 2, (float) sun_width, (float) sun_height, 1, 1, 
 				(float) sun.getRotation(), 
 				0, 0, (int) sun_width, (int) sun_height, 
