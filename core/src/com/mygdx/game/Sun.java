@@ -16,12 +16,14 @@ public class Sun {
 	private float speed;
 	private int radius;
 	private float temp;
-	private int deltatemp;
+	private float deltatemp;
 	private int sun_radius;
 	private float rotation;
-	private int deltarotation;
+	private float deltarotation;
 	private Texture sun_texture;
 	private GameScreen gamescreen;
+	
+	private int level;
 	
 
 	public Sun(GameScreen gamescreen, int x_origin, int y_origin, int radius, int sun_radius, int deltarotation, int deltatemp) {
@@ -45,16 +47,23 @@ public class Sun {
 	
 	public void update(float delta, boolean touched) {
 		temp += deltatemp * delta * 1f;
-		deltarotation = (int) temp *2;
+		deltarotation = temp * (2 + level / 3f);
 		if(temp > MAX_TEMP) {
-			// TODO uncomment once implemented
 			gamescreen.gameover();
 		} else if(!touched){
 			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
-//			pos.x = (int) (origin.x + Math.cos(degree) * radius);
-//			pos.y = (int) (origin.y + Math.sin(degree) * radius);
 		}
+	}
+
+	public void levelUp(int i) {
+		this.level++;
+		
+		this.decreasetemp(this.temp - 20f);
+		
+		i--;
+		if(i > 0)
+			levelUp(i);
 	}
 	
 	public void increasetemp(int delta) {
@@ -68,10 +77,9 @@ public class Sun {
 		}
 	}
 	
-	public void decreasetemp(int delta) {
+	public void decreasetemp(float delta) {
 		if(delta <= temp) {
 			temp -= delta;
-			deltarotation -= 2 * delta;
 		} else {
 			temp = 0;
 		}

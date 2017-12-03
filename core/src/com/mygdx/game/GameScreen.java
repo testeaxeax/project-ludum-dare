@@ -52,6 +52,8 @@ public final class GameScreen implements Screen {
 	
 	private double raydelta;
 	
+	private int level;
+	
 	private int score = 0;
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
 	private GlyphLayout scoreLayout;
@@ -64,6 +66,7 @@ public final class GameScreen implements Screen {
 	private boolean warned_before;
 	
 	private boolean shoot;
+	private int misses;
 	
 	private Polygon rayPol;
 	
@@ -115,12 +118,17 @@ public final class GameScreen implements Screen {
 		
 		this.rayPol = createPolygon();
 		this.shoot = false;
+		this.misses = 0;
+	
+		this.level = 0;
 	}
 
 	@Override
 	public void render(float delta) {
 		if(planets.isEmpty()) {
 			this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
+			level++;
+			sun.levelUp(1);
 		}
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
@@ -237,10 +245,16 @@ public final class GameScreen implements Screen {
 		
 		if(rayHitsPlanets(sr) && shoot) {
 			sun.decreasetemp(2);
+			this.misses = 0;
 			game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
 		}
-		else if(shoot)
+		else if(shoot) {
+			if(misses > 3)
+				sun.increasetemp(2);
+			
+			misses++;
 			game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+		}
 		
 		sr.end();
 	}
