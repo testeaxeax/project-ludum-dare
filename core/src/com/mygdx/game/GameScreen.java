@@ -186,7 +186,7 @@ public final class GameScreen implements Screen {
 		
 		// Render Sun
 		game.spritebatch.draw (sun.getSun_texture(), 
-				(float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 2, 
+				(float) sun.getPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getPos().y - sun.getSun_texture().getHeight() / 2, 
 				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
 				(float) sun.getRotation(), 
 				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
