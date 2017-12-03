@@ -98,10 +98,10 @@ public final class GameScreen implements Screen {
 		Explosion.setup(game.assetmanager);
 		this.explosions = new ArrayList<Explosion>();
 		
-		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
-		music.setLooping(true);
-		music.setVolume(0.1f);		
-		music.play();
+//		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
+//		music.setLooping(true);
+//		music.setVolume(0.1f);		
+//		music.play();
 		
 		this.start = 0l;
 	}
