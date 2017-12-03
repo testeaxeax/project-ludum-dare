@@ -1,17 +1,23 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
 	
@@ -127,7 +133,6 @@ public final class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		game.spritebatch.begin();
-		
 		//BACKGROUND has to be drawn FIRST!!
 		game.spritebatch.draw(background, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		
@@ -181,16 +186,34 @@ public final class GameScreen implements Screen {
 		scoreLayout.setText(game.font, "Score: "  + score);
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
+		
+		ShapeRenderer sr = new ShapeRenderer();
+		sr.setColor(Color.WHITE);
+		sr.setProjectionMatrix(cam.combined);
+		//draws lines from sunpos to planets (calculated by angles)
+		Vector2 rel = sun.getPos();
+		for(Planet p : planets) {
+			sr.begin(ShapeType.Line);
+			sr.line(rel.x, rel.y, 100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
+			sr.end();
+		}
+		
 		game.spritebatch.end();
 	}
 
 	
 	private boolean rayHitsPlanets() {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
+		Vector2 rel = sun.getPos();
+		
+		
+		
+		rel = new Vector2(rel.x + sun.getSunRadius()/2, rel.y + sun.getSunRadius()/2);
 		for(int i = 0; i < 4; i++) {
 			for(Planet p : planets) {
-				if(sun.getRotation() + 90*i > p.getAngleRelative(sun.getPos().x, sun.getPos().y) -p.getAngularWidth(sun.getPos().x, sun.getPos().y) &&
-				   sun.getRotation() + 90*i < p.getAngleRelative(sun.getPos().x, sun.getPos().y) +p.getAngularWidth(sun.getPos().x, sun.getPos().y )) {
+				
+				if(sun.getRotation() + 90*i > p.getAngleRelative(rel.x, rel.y) -p.getAngularWidth(rel.x, rel.y) &&
+				   sun.getRotation() + 90*i < p.getAngleRelative(rel.x, rel.y) +p.getAngularWidth(rel.x, rel.y )) {
 					toRemove.add(p);
 				}
 			}
@@ -198,6 +221,7 @@ public final class GameScreen implements Screen {
 		for(Planet p : toRemove) {
 			this.explosions.add(new Explosion(p));
 			planets.remove(p);
+			score += 1;
 		}
 		
 		return toRemove.size() > 0;
