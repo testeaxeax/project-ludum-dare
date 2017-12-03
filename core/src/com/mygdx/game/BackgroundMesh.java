@@ -70,6 +70,7 @@ public class BackgroundMesh {
 	public class Particle{
 		private float size;
 		private Vector2 vel, pos;
+		private boolean check = true;
 		
 		public Particle(float x, float y) {
 			this.pos = new Vector2(x, y);
@@ -86,10 +87,17 @@ public class BackgroundMesh {
 			if(this.pos.x > Project.SCREEN_WIDTH)
 				this.pos.x = -5;
 			
-			if(this.pos.y < 0)
-				this.pos.y = Project.SCREEN_HEIGHT + 5;
-			else if(this.pos.y > Project.SCREEN_HEIGHT)
-				this.pos.y = -5;
+			if(check == false && this.pos.y > 0 && this.pos.y < Project.SCREEN_HEIGHT) {
+				check = true;
+			}
+			if(this.pos.y < 0 && check) {
+					this.pos.y = Project.SCREEN_HEIGHT + 5;
+					check = false;
+			    }
+			else if(this.pos.y > Project.SCREEN_HEIGHT && check) {
+					this.pos.y = -5;
+					check = false;
+				}
 		}
 	}
 }
