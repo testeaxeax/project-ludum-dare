@@ -151,8 +151,8 @@ public final class GameScreen implements Screen {
 			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
 		
 
-		int sun_width = sun.getSun_texture().getWidth();
-		int sun_height = sun.getSun_texture().getHeight();
+		int sun_width = sun.getSunRadius();
+		int sun_height = sun.getSunRadius();
 		
 		// Render Explosions
 		for(int i = this.explosions.size() - 1; i >= 0; i--) {
@@ -187,9 +187,9 @@ public final class GameScreen implements Screen {
 		// Render Sun
 		game.spritebatch.draw (sun.getSun_texture(), 
 				(float) sun.getPos().x - sun_width / 2, (float) sun.getPos().y - sun_height / 2, 
-				(float) sun_width / 2, (float) sun_height / 2, (float) sun_width, (float) sun_height, 1, 1, 
+				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
 				(float) sun.getRotation(), 
-				0, 0, (int) sun_width, (int) sun_height, 
+				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
 				false, false);
 		
 		// Render warning
