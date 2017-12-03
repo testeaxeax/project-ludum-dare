@@ -36,7 +36,7 @@ public class Project extends Game {
 		screenmanager = new ScreenManager(this);
 		
 		// Load default font
-		font = assetmanager.easyget("fonts/LiberationSans-Regular.fnt", BitmapFont.class);
+		font = assetmanager.easyget("fonts/IHateComicSans.fnt", BitmapFont.class);
 		
 		// Load sounds
 		loadSounds();
