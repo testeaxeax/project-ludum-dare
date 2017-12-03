@@ -198,7 +198,7 @@ public final class GameScreen implements Screen {
 		Vector2 rel = sun.getPos();
 		for(Planet p : planets) {
 			sr.begin(ShapeType.Line);
-			sr.line(rel.x, rel.y, 100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
+			sr.line(rel.x, rel.y, rel.x +  100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), rel.y + 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
 			sr.end();
 		}
 		
