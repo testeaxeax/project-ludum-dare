@@ -57,6 +57,11 @@ public final class GameScreen implements Screen {
 	
 	private Music music;
 	
+	private Texture warning;
+	private static final String TEX_WARNING = "graphics/warning.png";
+	private float warning_sin;
+	private boolean warned_before;
+	
 	private long start;
 	private boolean started;
 	
@@ -76,6 +81,10 @@ public final class GameScreen implements Screen {
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
 		
 		background = game.assetmanager.get(BACKGROUND_TEXTURE_PATH);
+		
+		warning = game.assetmanager.get(TEX_WARNING, Texture.class);
+		this.warning_sin = 0f;
+		this.warned_before = false;
 		
 		
 		pb = new ProgressBar(50, 200, 50, 50, pbBorder, pbInfill);
@@ -133,6 +142,7 @@ public final class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		game.spritebatch.begin();
+		
 		//BACKGROUND has to be drawn FIRST!!
 		game.spritebatch.draw(background, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		
@@ -181,6 +191,29 @@ public final class GameScreen implements Screen {
 				(float) sun.getRotation(), 
 				0, 0, (int) sun_width, (int) sun_height, 
 				false, false);
+		
+		// Render warning
+		if(this.sun.getTemp() / Sun.MAX_TEMP > 0.8f) {
+
+			Color c = game.spritebatch.getColor();
+			c = game.spritebatch.getColor();
+			game.spritebatch.setColor(c.r, c.g, c.b, (float) (Math.sin(warning_sin)  + 1f ) / 3f);
+			
+			if(!this.warned_before) {
+				warning_sin = 0f;
+				warned_before = true;
+			}
+			else
+				warning_sin += delta * 4.5f;
+			
+			game.spritebatch.draw(warning, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+			
+			c = game.spritebatch.getColor();
+			game.spritebatch.setColor(c.r, c.g, c.b, 1f);
+		} else {
+			warned_before = false;
+		}
+		
 		
 		// Render progress bar
 		float x = 6f;
@@ -263,6 +296,8 @@ public final class GameScreen implements Screen {
 			m.load(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
 		
 		m.load(SR_SHAFT, Texture.class);
+		
+		m.load(TEX_WARNING, Texture.class);
 		
 		Explosion.load(m);
 	}
