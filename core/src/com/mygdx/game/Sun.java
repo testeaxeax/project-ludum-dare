@@ -45,6 +45,7 @@ public class Sun {
 	
 	public void update(float delta, boolean touched) {
 		temp += deltatemp * delta * 1f;
+		deltarotation = (int) temp *2;
 		if(temp > MAX_TEMP) {
 			// TODO uncomment once implemented
 			gamescreen.gameover();
@@ -57,17 +58,26 @@ public class Sun {
 	}
 	
 	public void increasetemp(int delta) {
-		if(temp < MAX_TEMP)temp += delta;
-		else temp = MAX_TEMP;
+		if(temp < MAX_TEMP) {
+			temp += delta;
+			deltarotation += 2 * delta;
+		}
+		else {
+			temp = MAX_TEMP;
+			
+		}
 	}
 	
 	public void decreasetemp(int delta) {
 		if(delta <= temp) {
 			temp -= delta;
+			deltarotation -= 2 * delta;
 		} else {
 			temp = 0;
 		}
 	}
+	
+	
 	
 	// blast is the index of the wanted blast, so something between 0 and 3
 	public Vector2 getNewblastposition(int blast_index) {

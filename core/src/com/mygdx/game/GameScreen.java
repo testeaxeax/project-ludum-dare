@@ -97,7 +97,7 @@ public final class GameScreen implements Screen {
 		
 		this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
 		
-		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 1);
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 2);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		
 		this.raydelta = 250d;
@@ -247,7 +247,7 @@ public final class GameScreen implements Screen {
 		
 		
 		
-		rel = new Vector2(rel.x + sun.getSunRadius()/2, rel.y + sun.getSunRadius()/2);
+		rel = new Vector2(rel.x, rel.y);
 		for(int i = 0; i < 4; i++) {
 			for(Planet p : planets) {
 				
