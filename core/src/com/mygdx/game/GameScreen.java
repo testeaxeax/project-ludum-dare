@@ -127,7 +127,6 @@ public final class GameScreen implements Screen {
 		
 			if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
 				this.raydelta = 0d;
-				sun.decreasetemp(3);
 				
 				shoot = true;
 				// TODO: uncomment
@@ -236,8 +235,10 @@ public final class GameScreen implements Screen {
 		sr.begin(ShapeType.Line);
 
 		
-		if(rayHitsPlanets(sr) && shoot)
+		if(rayHitsPlanets(sr) && shoot) {
+			sun.decreasetemp(2);
 			game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
+		}
 		else if(shoot)
 			game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
 		
@@ -265,7 +266,7 @@ public final class GameScreen implements Screen {
 		
 		rayPol.rotate(360 - sun.getRotation());
 		
-		r.polygon(rayPol.getTransformedVertices());
+//		r.polygon(rayPol.getTransformedVertices());
 		
 		if(this.shoot) {
 			for(Planet p : this.planets)
@@ -290,10 +291,10 @@ public final class GameScreen implements Screen {
 				this.planets.remove(p);
 		}
 
-		r.polygon(rayPol.getTransformedVertices());
-		
-		for(Planet p : this.planets)
-			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
+//		r.polygon(rayPol.getTransformedVertices());
+//		
+//		for(Planet p : this.planets)
+//			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
 		
 		
 		
