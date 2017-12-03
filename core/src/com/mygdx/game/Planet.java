@@ -51,7 +51,7 @@ public class Planet{
 	//returns the angle towards some point
 	public float getAngleRelative(float rx, float ry) {
 		float degree = (float) (Math.atan(((ry - (y + radius/2))/(rx - (x + radius/2)))) * (180/Math.PI));
-		return (x+radius/2) > rx ? 90 + degree : 270 + degree;
+		return ((x+radius/2) > rx ? 90 + degree : 270 + degree) - 90f;
 	}
 	
 	//calculates the angular width under the view from a given point.

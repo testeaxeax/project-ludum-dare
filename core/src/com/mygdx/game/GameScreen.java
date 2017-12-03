@@ -228,12 +228,14 @@ public final class GameScreen implements Screen {
 		sr.setColor(Color.WHITE);
 		sr.setProjectionMatrix(cam.combined);
 		//draws lines from sunpos to planets (calculated by angles)
+		
+		sr.begin(ShapeType.Line);
 		Vector2 rel = sun.getPos();
 		for(Planet p : planets) {
-			sr.begin(ShapeType.Line);
 			sr.line(rel.x, rel.y, rel.x +  100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), rel.y + 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
-			sr.end();
+			
 		}
+		sr.end();
 		
 		game.spritebatch.end();
 	}
