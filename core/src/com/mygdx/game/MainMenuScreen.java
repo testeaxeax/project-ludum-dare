@@ -28,7 +28,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private Texture tBlack;
 	private long last_click;
 	
-	private BackgroundMesh mesh;
+	public static BackgroundMesh mesh;
 	
 	public MainMenuScreen(Project game) {
 		this.game = game;
@@ -50,10 +50,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
 		
-		this.mesh = new BackgroundMesh(game);
+		mesh = new BackgroundMesh(game);
 		
 		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(200f / 255f, 200f / 255f, 200f / 255f, 1f);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		float x = Gdx.input.getX();
 		float y = Project.SCREEN_HEIGHT - Gdx.input.getY();
 		
-		this.mesh.update(delta, x, y);
+		mesh.update(delta, x, y);
 		
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -79,7 +79,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		
 		game.spritebatch.end();
 		
-		this.mesh.render(delta, cam);
+		mesh.render(delta, cam);
 
 		game.spritebatch.begin();
 		

@@ -221,7 +221,7 @@ public final class GameScreen implements Screen {
 		for(Planet p : toRemove) {
 			this.explosions.add(new Explosion(p));
 			planets.remove(p);
-			score += 1;
+			score++;
 		}
 		
 		return toRemove.size() > 0;
