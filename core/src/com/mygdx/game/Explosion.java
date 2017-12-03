@@ -15,8 +15,8 @@ public class Explosion {
 	private static Texture[] textures;
 	
 	public Explosion(Planet parent) {
-		this.x = parent.getX();
-		this.y = parent .getY();
+		this.x = parent.getPos().x;
+		this.y = parent .getPos().y;
 		
 		this.radius = parent.getRadius();
 		

@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,10 +12,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
@@ -62,11 +63,11 @@ public final class GameScreen implements Screen {
 	private float warning_sin;
 	private boolean warned_before;
 	
-	private long start;
-	private boolean started;
+	private boolean shoot;
+	
+	private Polygon rayPol;
 	
 	public GameScreen(Project game) {
-		this.started = false;
 		
 		this.game = game;
 		
@@ -112,7 +113,8 @@ public final class GameScreen implements Screen {
 //		music.setVolume(0.1f);		
 //		music.play();
 		
-		this.start = 0l;
+		this.rayPol = createPolygon();
+		this.shoot = false;
 	}
 
 	@Override
@@ -123,17 +125,18 @@ public final class GameScreen implements Screen {
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
 		
-		if(this.started) {
 			if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
 				this.raydelta = 0d;
 				sun.decreasetemp(3);
-				if(rayHitsPlanets())
-					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
-				else
-					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
-			}
-		} else 
-			this.started = System.currentTimeMillis() - this.start > 300;
+				
+				shoot = true;
+				// TODO: uncomment
+//				if(rayHitsPlanets())
+//					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
+//				else
+//					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+			} else
+				this.shoot = false;
 		
 		
 		sun.update(delta, this.raydelta <= 180);
@@ -148,7 +151,7 @@ public final class GameScreen implements Screen {
 		
 		// Render planets
 		for(Planet p : this.planets)
-			this.game.spritebatch.draw(p.getRegion(), p.getX(), p.getY(), p.getRadius() * 2, p.getRadius() * 2);
+			this.game.spritebatch.draw(p.getRegion(), p.getPos().x, p.getPos().y, p.getRadius() * 2, p.getRadius() * 2);
 		
 
 		int sun_width = sun.getSunRadius();
@@ -176,19 +179,20 @@ public final class GameScreen implements Screen {
 			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
 					length / 2f + sun_width / 2, size_shaft / 2f, 
 					length, size_shaft, 
-					1f, 1f, sun.getRotation());
+					1f, 1f, 360f - sun.getRotation());
 			
 			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
 					length / 2f + sun_width / 2, size_shaft / 2f, 
 					length, size_shaft, 
-					1f, 1f, sun.getRotation() + 90f);
+					1f, 1f, 360f - sun.getRotation() + 90f);
+			
 		}
 		
 		// Render Sun
 		game.spritebatch.draw (sun.getSun_texture(), 
 				(float) sun.getPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getPos().y - sun.getSun_texture().getHeight() / 2, 
 				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
-				(float) sun.getRotation(), 
+				360f - sun.getRotation(), 
 				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
 				false, false);
 		
@@ -223,50 +227,100 @@ public final class GameScreen implements Screen {
 		scoreLayout.setText(game.font, "Score: "  + score);
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
+		game.spritebatch.end();
 		
 		ShapeRenderer sr = new ShapeRenderer();
-		sr.setColor(Color.WHITE);
+		
+		sr.setColor(Color.RED);
 		sr.setProjectionMatrix(cam.combined);
-		//draws lines from sunpos to planets (calculated by angles)
-		
 		sr.begin(ShapeType.Line);
-		Vector2 rel = sun.getPos();
-		for(Planet p : planets) {
-			sr.line(rel.x, rel.y, rel.x +  100 * (float) Math.cos(Math.toRadians(p.getAngleRelative(rel.x, rel.y))), rel.y + 100 * (float) Math.sin(Math.toRadians(p.getAngleRelative(rel.x, rel.y))));
-			
-		}
-		sr.end();
+
 		
-		game.spritebatch.end();
+		if(rayHitsPlanets(sr) && shoot)
+			game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
+		else if(shoot)
+			game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+		
+		sr.end();
+	}
+	
+	private Polygon createPolygon() {
+		Vector2 rel = sun.getPos();
+		
+		float width = Project.SCREEN_WIDTH * 2f;
+		float height = 10f;
+		float x = rel.x - Project.SCREEN_WIDTH;
+		float y = rel.y - height / 2f;
+		
+		Polygon ret = new Polygon(new float[]{x, y, x + width, y, x + width, y + height, x, y + height});
+		ret.setOrigin(rel.x, rel.y);
+		
+		return ret;
 	}
 
 	
-	private boolean rayHitsPlanets() {
+	private boolean rayHitsPlanets(ShapeRenderer r) {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
 		Vector2 rel = sun.getPos();
 		
+		rayPol.rotate(360 - sun.getRotation());
 		
+		r.polygon(rayPol.getTransformedVertices());
 		
-		rel = new Vector2(rel.x, rel.y);
-		for(int i = 0; i < 4; i++) {
-			for(Planet p : planets) {
-				
-				if(sun.getRotation() + 90*i > p.getAngleRelative(rel.x, rel.y) -p.getAngularWidth(rel.x, rel.y) &&
-				   sun.getRotation() + 90*i < p.getAngleRelative(rel.x, rel.y) +p.getAngularWidth(rel.x, rel.y )) {
+		if(this.shoot) {
+			for(Planet p : this.planets)
+				if(overlaps(rayPol, p.getShape()) && !toRemove.contains(p))
 					toRemove.add(p);
-				}
-			}
+			
+			for(Planet p : toRemove)
+				this.planets.remove(p);
 		}
-		for(Planet p : toRemove) {
-			this.explosions.add(new Explosion(p));
-			planets.remove(p);
-			score++;
+		rayPol.rotate(90);
+		
+		if(this.shoot) {
+			for(Planet p : this.planets)
+				if(overlaps(rayPol, p.getShape()) && !toRemove.contains(p))
+					toRemove.add(p);
+			
+			for(Planet p : toRemove)
+				this.planets.remove(p);
 		}
+
+		r.polygon(rayPol.getTransformedVertices());
+		
+		for(Planet p : this.planets)
+			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
+		
+		
+		
+		rayPol.rotate(sun.getRotation() - 90);
 		
 		return toRemove.size() > 0;
 	}
 	
+	public boolean overlaps(Polygon polygon, Circle circle) {
+	    float []vertices=polygon.getTransformedVertices();
+	    Vector2 center=new Vector2(circle.x, circle.y);
+	    float squareRadius=circle.radius*circle.radius;
+	    for (int i=0;i<vertices.length;i+=2){
+	        if (i==0){
+	            if (Intersector.intersectSegmentCircle(new Vector2(vertices[vertices.length-2], vertices[vertices.length-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
+	                return true;
+	        } else {
+	            if (Intersector.intersectSegmentCircle(new Vector2(vertices[i-2], vertices[i-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
+	                return true;
+	        }
+	    }
+	    return false;
+	}
 	
+	public ArrayList<Planet> checkPlanets(float x, float y, ArrayList<Planet> array) {
+		for(Planet p : this.planets)
+			if(p.contains(x, y) && !array.contains(p))
+				array.add(p);
+		
+		return array;
+	}
 	
 	public ProgressBar getPB() {
 		return this.pb;
@@ -282,7 +336,6 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		this.start = System.currentTimeMillis();
 	}
 
 	public static void prefetch(AssetManager m) {
