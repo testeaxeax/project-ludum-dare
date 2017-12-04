@@ -20,6 +20,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
 	private static final String TEXTURE_BLACK_PATH = "graphics/black.png";
+	private static final String TITLE_TEXTURE_PATH = "graphics/title.png";
 	private static final long CLICK_TIMEOUT = 1000;
 	
 	private Project game;
@@ -28,6 +29,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private Button bcredits;
 	private Texture background;
 	private Texture tBlack;
+	private Texture title;
 	private long last_click;
 	
 	public static BackgroundMesh mesh;
@@ -41,6 +43,8 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		
 		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
 		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		
+		title = game.assetmanager.get(TITLE_TEXTURE_PATH, Texture.class);
 		
 		bstart.setX(bstart.getX() - bstart.getWidth() / 2);
 		bstart.setY(bstart.getY() - bstart.getHeight() / 2);
@@ -99,6 +103,10 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 			game.spritebatch.draw(tBlack, bcredits.getX() - 1, bcredits.getY() - 2, bcredits.getWidth() + 2, bcredits.getHeight() + 4);
 			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX() + 2, bcredits.getY() + 1, bcredits.getWidth() - 4, bcredits.getHeight() - 2);
 		}
+		
+		game.spritebatch.draw(title, Project.SCREEN_WIDTH/2 - 400, Project.SCREEN_HEIGHT -320, 800, 300);
+		
+		
 		game.spritebatch.end();
 	}
 
@@ -139,6 +147,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		m.load(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class);
 		m.load(BACKGROUND_ASSET_PATH, Texture.class);
 		m.load(TEXTURE_BLACK_PATH, Texture.class);
+		m.load(TITLE_TEXTURE_PATH, Texture.class);
 	}
 	
 	@Override
@@ -167,6 +176,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		game.assetmanager.unload(CREDITSBUTTON_TEXTURE_ASSET_PATH);
 		game.assetmanager.unload(BACKGROUND_ASSET_PATH);
 		game.assetmanager.unload(TEXTURE_BLACK_PATH);
+		game.assetmanager.unload(TITLE_TEXTURE_PATH);
 		
 		Gdx.input.setInputProcessor(null);
 	}
