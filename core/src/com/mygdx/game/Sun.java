@@ -163,7 +163,7 @@ public class Sun implements SpaceObject {
 		float x = pos.x;
 		float y = pos.y;
 		
-		return new Vector2(x - sun_texture.getWidth() / 2 + 10, y - sun_texture.getHeight() / 2 + 10);
+		return new Vector2(x - sun_texture.getWidth() / 2, y - sun_texture.getHeight() / 2);
 	}
 	
 	public static void prefetch(AssetManager m) {
