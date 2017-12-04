@@ -177,8 +177,6 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 		game.assetmanager.unload(BACKGROUND_ASSET_PATH);
 		game.assetmanager.unload(TEXTURE_BLACK_PATH);
 		game.assetmanager.unload(TITLE_TEXTURE_PATH);
-		
-		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override

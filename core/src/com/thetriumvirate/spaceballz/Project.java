@@ -56,8 +56,6 @@ public class Project extends Game {
 	
 	@Override
 	public void dispose() {
-		assetmanager.unload("audio/sounds/planet_vanish.wav");
-		
 		screenmanager.dispose();
 		spritebatch.dispose();
 		assetmanager.dispose();
