@@ -5,9 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public final class GameoverMenuScreen implements Screen, InputProcessor {
 	
@@ -25,8 +29,14 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	private Texture background;
 	private Texture tBlack;
 	
-	public GameoverMenuScreen(Project game) {
+	
+	private int score, level;
+	private GlyphLayout scoreLayout;
+	
+	public GameoverMenuScreen(Project game, int score, int level) {
 		this.game = game;
+		this.score = score;
+		this.level = level;
 		
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
 		
@@ -45,6 +55,9 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
 		game.spritebatch.setProjectionMatrix(cam.combined);
+		
+		scoreLayout = new GlyphLayout();
+		
 		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 	}
@@ -82,6 +95,44 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 			game.spritebatch.draw(tBlack, bmenu.getX() - 1, bmenu.getY() - 2, bmenu.getWidth() + 2, bmenu.getHeight() + 4);
 			game.spritebatch.draw(bmenu.getTexture(), bmenu.getX() + 2, bmenu.getY() + 1, bmenu.getWidth() - 4, bmenu.getHeight() - 2);
 		}
+		
+		
+		scoreLayout.setText(game.font, "Score: " + score + "\n" + "Level: " + level); 
+
+		game.spritebatch.end();
+		
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		
+		ShapeRenderer r = new ShapeRenderer();
+		r.setProjectionMatrix(cam.combined);
+		
+		r.setColor(new Color(0f, 0f, 0f, 0.7f));
+		
+		float margin = 16f;
+		int line_width = 2;
+		
+		r.begin(ShapeType.Filled);
+		r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
+		r.end();
+		
+		r.setColor(new Color(0f, 0f, 0f, 1f));
+		
+		r.begin(ShapeType.Line);
+		for(int i = 0; i < line_width; i++) {
+			r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
+			margin -= 1f;
+			if(margin < 0f)
+				break;
+		}
+		r.end();
+		
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		
+		game.spritebatch.begin();
+		
+		game.font.draw(game.spritebatch, scoreLayout, Project.SCREEN_WIDTH/2 - scoreLayout.width/2, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height/2);
+		
 		game.spritebatch.end();
 	}
 
