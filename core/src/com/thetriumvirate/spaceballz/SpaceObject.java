@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.thetriumvirate.spaceballz;
 
 import com.badlogic.gdx.math.Vector2;
 

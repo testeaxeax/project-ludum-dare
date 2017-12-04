@@ -1,9 +1,9 @@
-package com.mygdx.game.desktop;
+package com.thetriumvirate.spaceballz;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.game.Project;
+import com.thetriumvirate.spaceballz.Project;
 
 public class DesktopLauncher {
 	public static void main(String[] arg) {
