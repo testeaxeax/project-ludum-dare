@@ -8,17 +8,17 @@ public class Explosion {
 	private float radius;
 
 	private static final String PATH = "graphics/explosions/explosion1.png";
-	private static final float duration = 0.1f;
+	public static final float duration = 0.1f;
 	
 	private float stateTimer;
 	
 	private static Texture[] textures;
 	
-	public Explosion(Planet parent) {
+	public Explosion(SpaceObject parent) {
 		this.x = parent.getPos().x;
 		this.y = parent .getPos().y;
 		
-		this.radius = parent.getRadius() * 2f;
+		this.radius = parent.getRadius() * 2;
 		
 		this.stateTimer = 0.0f;
 	}
