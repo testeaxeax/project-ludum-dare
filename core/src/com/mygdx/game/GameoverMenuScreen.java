@@ -103,30 +103,6 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		
-		ShapeRenderer r = new ShapeRenderer();
-		r.setProjectionMatrix(cam.combined);
-		
-		r.setColor(new Color(0f, 0f, 0f, 0.7f));
-		
-		float margin = 16f;
-		int line_width = 2;
-		
-		r.begin(ShapeType.Filled);
-		r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
-		r.end();
-		
-		r.setColor(new Color(0f, 0f, 0f, 1f));
-		
-		r.begin(ShapeType.Line);
-		for(int i = 0; i < line_width; i++) {
-			r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
-			margin -= 1f;
-			if(margin < 0f)
-				break;
-		}
-		r.end();
-		
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		
 		game.spritebatch.begin();
