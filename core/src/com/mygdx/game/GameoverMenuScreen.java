@@ -98,17 +98,7 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		
 		
 		scoreLayout.setText(game.font, "Score: " + score + "\n" + "Level: " + level); 
-
-		game.spritebatch.end();
-		
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-		
-		game.spritebatch.begin();
-		
 		game.font.draw(game.spritebatch, scoreLayout, Project.SCREEN_WIDTH/2 - scoreLayout.width/2, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height/2);
-		
 		game.spritebatch.end();
 	}
 
