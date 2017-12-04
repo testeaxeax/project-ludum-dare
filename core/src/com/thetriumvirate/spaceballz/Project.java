@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.thetriumvirate.spaceballz;
 
 import java.util.Random;
 
