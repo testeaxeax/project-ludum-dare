@@ -72,14 +72,12 @@ public final class SplashScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.spritebatch.begin();
-		
 		if(this.posY > CAM_HEIGHT) {
-			game.spritebatch.end();
 			this.dispose();
 			game.screenmanager.set(this.nextScreen);
 		} else {
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			game.spritebatch.begin();
 			if(this.checkprogress()) {
 				if(this.nextScreen == null)
 					this.nextScreen = new MainMenuScreen(game);

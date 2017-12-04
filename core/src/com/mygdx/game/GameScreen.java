@@ -34,14 +34,12 @@ public final class GameScreen implements Screen {
 	private TextureRegion texture_sunray_shaft;
 	private static final String SR_SHAFT = "graphics/rayshaft.png";
 	
-	private float pbAnimationTimer;
+//	private float pbAnimationTimer;
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
-	private Texture pbAnimation;
 	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
 	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
-	private static final String PB_ANIMATION_TEXTURE_PATH = "graphics/pbAnimation.png";
 	
 	private Texture background;
 	private static final String BACKGROUND_TEXTURE_PATH = "graphics/gameBackground.png";
@@ -86,10 +84,9 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		
-		pbAnimationTimer = 0f;
+//		pbAnimationTimer = 0f;
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
-		pbAnimation = game.assetmanager.get(PB_ANIMATION_TEXTURE_PATH);
 		
 		background = game.assetmanager.get(BACKGROUND_TEXTURE_PATH);
 		
@@ -243,8 +240,7 @@ public final class GameScreen implements Screen {
 		ScissorStack.pushScissors(scissors);
 		game.spritebatch.begin();
 		
-		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), pb.getHeight());
-//		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), (pb.getHeight() - 2*x) * pb.getPercentage());
+		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX() + pb.getWidth() / 10, pb.getPosY() + x, pb.getWidth() - 14f/60f * pb.getWidth(), pb.getHeight());
 		game.spritebatch.flush();
 		ScissorStack.popScissors();
 		
@@ -399,7 +395,7 @@ public final class GameScreen implements Screen {
 		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
-		m.load(PB_ANIMATION_TEXTURE_PATH, Texture.class);
+//		m.load(PB_ANIMATION_TEXTURE_PATH, Texture.class);
 		
 		m.load(BACKGROUND_TEXTURE_PATH, Texture.class);
 		
