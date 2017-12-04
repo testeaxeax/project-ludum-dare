@@ -166,8 +166,6 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		game.assetmanager.unload(MENUBUTTON_TEXTURE_ASSET_PATH);
 		game.assetmanager.unload(BACKGROUND_ASSET_PATH);
 		game.assetmanager.unload(TEXTURE_BLACK_PATH);
-		
-		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override

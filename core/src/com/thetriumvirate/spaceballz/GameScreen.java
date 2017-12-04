@@ -468,6 +468,8 @@ public final class GameScreen implements Screen {
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
 		
 		game.assetmanager.unload(TUTORIAL_OVERLAY_PATH);
+		game.assetmanager.unload(TEX_WARNING);
+		game.assetmanager.unload(EXPLOSION_SUN_ASSET_PATH);
 	}
 
 	public Texture[] getPlanetTextures() {
