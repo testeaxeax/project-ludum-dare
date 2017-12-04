@@ -110,7 +110,7 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		r.setColor(new Color(0f, 0f, 0f, 0.7f));
 		
 		float margin = 16f;
-		int line_width = 3;
+		int line_width = 2;
 		
 		r.begin(ShapeType.Filled);
 		r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
