@@ -40,8 +40,13 @@ public class Planet{
 	public void update(float delta) {
 		this.animationTimer += delta * this.vel;
 		
-		this.pos.set(screen.sun.getPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO, screen.sun.getPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst);
+		float x = screen.sun.getPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO;
+		float y = screen.sun.getPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst;
 		
+		this.pos.set(x, y);
+		
+//		this.pos.set(screen.sun.getPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO, screen.sun.getPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst);
+//		
 		this.shape.setPosition(this.pos.x + this.radius, this.pos.y + this.radius);
 	}
 	
@@ -68,9 +73,7 @@ public class Planet{
 	}
 	
 	private boolean checkLocation(ArrayList<Planet> planets) {
-		Vector2 mid = new Vector2(Project.SCREEN_HEIGHT / 2f, Project.SCREEN_WIDTH / 2f);
-		
-		if(this.origin.dst(mid) < 250f + this.getRadius())
+		if(this.origin.dst(screen.sun.getPos()) < 250f + this.getRadius())
 			return false;
 		
 		for(Planet p : planets) {
