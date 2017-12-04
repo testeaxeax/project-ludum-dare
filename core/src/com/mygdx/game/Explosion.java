@@ -10,13 +10,17 @@ public class Explosion {
 	private static final String PATH = "graphics/explosions/explosion1.png";
 	public static final float duration = 0.1f;
 	
+	private int reps;
+	
 	private float stateTimer;
 	
 	private static Texture[] textures;
 	
-	public Explosion(SpaceObject parent) {
+	public Explosion(SpaceObject parent, int reps) {
 		this.x = parent.getPos().x;
 		this.y = parent .getPos().y;
+		
+		this.reps = 4 * reps;
 		
 		this.radius = parent.getRadius() * 2;
 		
@@ -34,16 +38,17 @@ public class Explosion {
 	public Texture getTexture(float delta) {
 		stateTimer += delta;
 		
-		if(stateTimer < 4 * duration)
+		if(stateTimer < reps * duration) {
 			return textures[getIndex()];
-		
+		}
+
 		return null;
 	}
 	
 	private int getIndex() {
 		int ret = 0;
 		
-		float f = this.stateTimer;
+		float f = this.stateTimer % (4 * duration);
 		
 		while(f > duration) {
 			ret++;
@@ -75,5 +80,9 @@ public class Explosion {
 
 	public float getRadius() {
 		return radius;
+	}
+
+	public float getDuration() {
+		return this.reps * duration;
 	}
 }

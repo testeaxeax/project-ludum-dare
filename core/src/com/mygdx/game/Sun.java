@@ -48,16 +48,20 @@ public class Sun implements SpaceObject {
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
 	
+	public boolean renderMe() {
+		return this.temp <= MAX_TEMP;
+	}
+	
 	public void update(float delta, boolean touched) {
 		temp += deltatemp * delta * 1f;
 		deltarotation = temp * (2 + level / 3f);
 		if(temp > MAX_TEMP) {
 			if(explosion == null) {
-				explosion = new Explosion(this);
+				explosion = new Explosion(this, 4);
 				gamescreen.getGame().assetmanager.get(GameScreen.EXPLOSION_SUN_ASSET_PATH, Sound.class).play(0.1f);
 			}
 			gamescreen.getExplosions().add(explosion);
-			if(explosion.getTimer() > Explosion.duration) {
+			if(explosion.getTimer() > explosion.getDuration()) {
 				gamescreen.gameover();
 			}
 		} else if(!touched){

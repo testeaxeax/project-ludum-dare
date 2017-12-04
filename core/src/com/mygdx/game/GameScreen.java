@@ -156,7 +156,7 @@ public final class GameScreen implements Screen {
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
 		
-		if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
+		if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3 && sun.renderMe()) {
 			this.raydelta = 0d;
 			
 			shoot = true;
@@ -203,13 +203,17 @@ public final class GameScreen implements Screen {
 			
 		}
 		
-		// Render Sun
-		game.spritebatch.draw (sun.getSun_texture(), 
-				(float) sun.getOriginPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getOriginPos().y - sun.getSun_texture().getHeight() / 2, 
-				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
-				360f - sun.getRotation(), 
-				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
-				false, false);
+		
+		if(sun.renderMe()) {
+			// Render Sun
+			game.spritebatch.draw (sun.getSun_texture(),
+					(float) sun.getPos().x, (float) sun.getPos().y, 
+					(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
+					360f - sun.getRotation(), 
+					0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
+					false, false);
+		}
+		
 		
 		// Render Explosions
 		for(int i = this.explosions.size() - 1; i >= 0; i--) {
@@ -363,7 +367,7 @@ public final class GameScreen implements Screen {
 		if(shoot)
 			for(Planet p : toRemove) {
 				this.planets.remove(p);
-				this.explosions.add(new Explosion(p));
+				this.explosions.add(new Explosion(p, 1));
 			}
 		
 		rayPol.rotate(sun.getRotation() - 90);
