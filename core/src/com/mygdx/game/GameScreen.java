@@ -18,7 +18,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 public final class GameScreen implements Screen {
 	
@@ -32,11 +34,14 @@ public final class GameScreen implements Screen {
 	private TextureRegion texture_sunray_shaft;
 	private static final String SR_SHAFT = "graphics/rayshaft.png";
 	
+	private float pbAnimationTimer;
 	private ProgressBar pb;
 	private Texture pbBorder;
 	private Texture pbInfill;
+	private Texture pbAnimation;
 	private static final String PB_BORDER_TEXTURE_PATH = "graphics/pbBordertest.png";
 	private static final String PB_INFILL_TEXTURE_PATH = "graphics/pbInfilltest.png";
+	private static final String PB_ANIMATION_TEXTURE_PATH = "graphics/pbAnimation.png";
 	
 	private Texture background;
 	private static final String BACKGROUND_TEXTURE_PATH = "graphics/gameBackground.png";
@@ -84,8 +89,10 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		
+		pbAnimationTimer = 0f;
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
 		pbInfill = game.assetmanager.get(PB_INFILL_TEXTURE_PATH);
+		pbAnimation = game.assetmanager.get(PB_ANIMATION_TEXTURE_PATH);
 		
 		background = game.assetmanager.get(BACKGROUND_TEXTURE_PATH);
 		
@@ -94,7 +101,7 @@ public final class GameScreen implements Screen {
 		this.warned_before = false;
 		
 		
-		pb = new ProgressBar(60, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 60, 0, pbBorder, pbInfill);
+		pb = new ProgressBar(30, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 30, 0, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
 		
 		this.planetTextures = new Texture[PLANET_TEXTURES];
@@ -239,8 +246,39 @@ public final class GameScreen implements Screen {
 		
 		// Render progress bar
 		float x = 6f;
-		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), (pb.getHeight() - 2*x) * pb.getPercentage());
+		Rectangle scissors = new Rectangle();
+		Rectangle clipBounds = new Rectangle(pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight() * pb.getAnimationProgress(delta));
+		ScissorStack.calculateScissors(cam, game.spritebatch.getTransformMatrix(), clipBounds, scissors);
+
+		game.spritebatch.end();
+		ScissorStack.pushScissors(scissors);
+		game.spritebatch.begin();
+		
+		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), pb.getHeight());
+//		game.spritebatch.draw(pb.getInfillTexture(), pb.getPosX(), pb.getPosY() + x, pb.getWidth(), (pb.getHeight() - 2*x) * pb.getPercentage());
+		game.spritebatch.flush();
+		ScissorStack.popScissors();
+		
+//		scissors = new Rectangle();
+//		clipBounds = new Rectangle(pb.getPosX(), pb.getPosY() + pb.getHeight() * pb.getAnimationProgress(), pb.getWidth(), pbAnimation.getHeight() / 2f);
+//		ScissorStack.calculateScissors(cam, game.spritebatch.getTransformMatrix(), clipBounds, scissors);
+//		
+//		game.spritebatch.end();
+//		ScissorStack.pushScissors(scissors);
+//		game.spritebatch.begin();
+//		
+//		game.spritebatch.draw(pbAnimation, clipBounds.getX() - this.pbAnimationTimer, clipBounds.getY(), pbAnimation.getWidth(), clipBounds.getHeight());
+//		if(this.pbAnimationTimer > pbAnimation.getWidth() - pb.getWidth()) {
+//			game.spritebatch.draw(pbAnimation, clipBounds.getX() + this.pbAnimation.getWidth() - this.pbAnimationTimer, clipBounds.getY(), pbAnimation.getWidth(), clipBounds.getHeight());
+//		}
+//		
+//		game.spritebatch.flush();
+//		ScissorStack.popScissors();
+//		
+//		this.pbAnimationTimer += delta * 80f;
+		
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
+
 		
 		scoreLayout.setText(game.font, "Score: "  + score);
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
@@ -373,6 +411,7 @@ public final class GameScreen implements Screen {
 		Sun.prefetch(m);
 		m.load(PB_BORDER_TEXTURE_PATH, Texture.class);
 		m.load(PB_INFILL_TEXTURE_PATH, Texture.class);
+		m.load(PB_ANIMATION_TEXTURE_PATH, Texture.class);
 		
 		m.load(BACKGROUND_TEXTURE_PATH, Texture.class);
 		
