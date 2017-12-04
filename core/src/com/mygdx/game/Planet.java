@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Planet{
+public class Planet implements SpaceObject{
 	private float radius;
 	private Vector2 origin;
 	private Vector2 pos;
@@ -40,8 +40,8 @@ public class Planet{
 	public void update(float delta) {
 		this.animationTimer += delta * this.vel;
 		
-		float x = screen.sun.getPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO;
-		float y = screen.sun.getPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst;
+		float x = screen.sun.getOriginPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO;
+		float y = screen.sun.getOriginPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst;
 		
 		this.pos.set(x, y);
 		
@@ -55,11 +55,11 @@ public class Planet{
 		float x;
 		float y;
 		
-		Vector2 rel = screen.sun.getPos();
+		Vector2 rel = screen.sun.getOriginPos();
 		
 		do {
 			this.animationTimer = Project.RAND.nextFloat() * 360f;
-			dst = Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT / 2f - screen.sun.getSunRadius() - 50f) + screen.sun.getSunRadius() + 50f;
+			dst = Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT / 2f - screen.sun.getRadius() - 50f) + screen.sun.getRadius() + 50f;
 			
 			x = rel.x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO;
 			y = rel.y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst;

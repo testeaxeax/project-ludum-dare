@@ -68,6 +68,7 @@ public final class GameScreen implements Screen {
 	
 	private Texture warning;
 	private static final String TEX_WARNING = "graphics/warning.png";
+	public static final String EXPLOSION_SUN_ASSET_PATH = "audio/sounds/explosion_sun.wav";
 	private float warning_sin;
 	private boolean warned_before;
 	
@@ -105,7 +106,7 @@ public final class GameScreen implements Screen {
 		pb = new ProgressBar(30, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 30, 0, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
 		
-		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 2);
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 50, 30, 2);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 
 		this.planetTextures = new Texture[PLANET_TEXTURES];
@@ -179,8 +180,36 @@ public final class GameScreen implements Screen {
 			this.game.spritebatch.draw(p.getRegion(), p.getPos().x, p.getPos().y, p.getRadius() * 2, p.getRadius() * 2);
 		
 
-		int sun_width = sun.getSunRadius();
-		int sun_height = sun.getSunRadius();
+		int sun_width = (int) sun.getRadius() * 2;
+		int sun_height = (int) sun.getRadius() * 2;
+		
+		
+		// Render rays
+		if(this.raydelta < 180) {
+			float sin = (float) Math.sin(this.raydelta / 180d * Math.PI);
+			
+			float size_shaft = 3 + 7f * sin;
+			float length = Project.SCREEN_WIDTH * 4f * sin;
+			
+			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getOriginPos().y - size_shaft / 2f, 
+					length / 2f + sun_width / 2, size_shaft / 2f, 
+					length, size_shaft, 
+					1f, 1f, 360f - sun.getRotation());
+			
+			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getOriginPos().y - size_shaft / 2f, 
+					length / 2f + sun_width / 2, size_shaft / 2f, 
+					length, size_shaft, 
+					1f, 1f, 360f - sun.getRotation() + 90f);
+			
+		}
+		
+		// Render Sun
+		game.spritebatch.draw (sun.getSun_texture(), 
+				(float) sun.getOriginPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getOriginPos().y - sun.getSun_texture().getHeight() / 2, 
+				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
+				360f - sun.getRotation(), 
+				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
+				false, false);
 		
 		// Render Explosions
 		for(int i = this.explosions.size() - 1; i >= 0; i--) {
@@ -192,34 +221,6 @@ public final class GameScreen implements Screen {
 			else
 				this.explosions.remove(i);
 		}
-		
-		
-		// Render rays
-		if(this.raydelta < 180) {
-			float sin = (float) Math.sin(this.raydelta / 180d * Math.PI);
-			
-			float size_shaft = 3 + 7f * sin;
-			float length = Project.SCREEN_WIDTH * 4f * sin;
-			
-			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
-					length / 2f + sun_width / 2, size_shaft / 2f, 
-					length, size_shaft, 
-					1f, 1f, 360f - sun.getRotation());
-			
-			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getPos().y - size_shaft / 2f, 
-					length / 2f + sun_width / 2, size_shaft / 2f, 
-					length, size_shaft, 
-					1f, 1f, 360f - sun.getRotation() + 90f);
-			
-		}
-		
-		// Render Sun
-		game.spritebatch.draw (sun.getSun_texture(), 
-				(float) sun.getPos().x - sun.getSun_texture().getWidth() / 2, (float) sun.getPos().y - sun.getSun_texture().getHeight() / 2, 
-				(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
-				360f - sun.getRotation(), 
-				0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
-				false, false);
 		
 		// Render warning
 		if(this.sun.getTemp() / Sun.MAX_TEMP > 0.8f) {
@@ -314,7 +315,7 @@ public final class GameScreen implements Screen {
 	}
 
 	private Polygon createPolygon() {
-		Vector2 rel = sun.getPos();
+		Vector2 rel = sun.getOriginPos();
 		
 		float width = Project.SCREEN_WIDTH * 2f;
 		float height = 10f;
@@ -429,8 +430,12 @@ public final class GameScreen implements Screen {
 		Explosion.load(m);
 		
 		m.load(ALARM_WAV_PATH, Sound.class);
-		
-		m.load(TUTORIAL_OVERLAY_PATH, Texture.class);
+    m.load(TUTORIAL_OVERLAY_PATH, Texture.class);
+		m.load(EXPLOSION_SUN_ASSET_PATH, Sound.class);
+	}
+	
+	public ArrayList<Explosion> getExplosions(){
+		return explosions;
 	}
 	
 	@Override

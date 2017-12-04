@@ -43,7 +43,7 @@ public class PlanetManager {
 		
 		Vector2 delta = new Vector2(x, y);
 		
-		if(screen.sun.getPos().dst(delta) > 80)
+		if(screen.sun.getOriginPos().dst(delta) > 80)
 			return false;
 		
 		return true;

@@ -1,10 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-public class Sun {
+public class Sun implements SpaceObject {
 	
 	private static final String SUN_TEXTURE_PATH = "graphics/sun_texture.png";
 	
@@ -22,6 +23,8 @@ public class Sun {
 	private float deltarotation;
 	private Texture sun_texture;
 	private GameScreen gamescreen;
+	private Explosion explosion = null;
+	private Sound sound;
 	
 	private int level;
 	
@@ -49,7 +52,14 @@ public class Sun {
 		temp += deltatemp * delta * 1f;
 		deltarotation = temp * (2 + level / 3f);
 		if(temp > MAX_TEMP) {
-			gamescreen.gameover();
+			if(explosion == null) {
+				explosion = new Explosion(this);
+				gamescreen.getGame().assetmanager.get(GameScreen.EXPLOSION_SUN_ASSET_PATH, Sound.class).play(0.1f);
+			}
+			gamescreen.getExplosions().add(explosion);
+			if(explosion.getTimer() > Explosion.duration) {
+				gamescreen.gameover();
+			}
 		} else if(!touched){
 			rotation = ((rotation + deltarotation * delta) % 360);
 			degree = (degree + speed * delta) % 360;
@@ -113,11 +123,11 @@ public class Sun {
 		return blast_pos;
 	}
 	
-	public int getRadius() {
+	public float getOrbitRadius() {
 		return radius;
 	}
 	
-	public int getSunRadius() {
+	public float getRadius() {
 		return sun_radius;
 	}
 	
@@ -145,8 +155,15 @@ public class Sun {
 		return sun_texture;
 	}
 
-	public Vector2 getPos() {
+	public Vector2 getOriginPos() {
 		return pos;
+	}
+	
+	public Vector2 getPos() {
+		float x = pos.x;
+		float y = pos.y;
+		
+		return new Vector2(x - sun_texture.getWidth() / 2, y - sun_texture.getHeight() / 2);
 	}
 	
 	public static void prefetch(AssetManager m) {
