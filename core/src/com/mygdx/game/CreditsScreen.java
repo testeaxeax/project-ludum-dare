@@ -15,7 +15,7 @@ public final class CreditsScreen implements Screen {
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String CREDITS_BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
-	private static final String CREDITS = "TEST";
+	private static final String CREDITS = "Game developed for Ludum Dare 40 within 72 hours by:\nInzenhofer Tobias\nPoellinger Maximilian\nBrunner Moritz";
 	
 	private Project game;
 	private OrthographicCamera cam;
@@ -53,7 +53,7 @@ public final class CreditsScreen implements Screen {
 			dispose();
 		}
 		layout.setText(game.font, CREDITS);
-		Vector2 position = new Vector2(Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2);
+		Vector2 position = new Vector2(Project.SCREEN_WIDTH / 2 - layout.width / 2, Project.SCREEN_HEIGHT / 2 + layout.height / 2);
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0 , Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		game.spritebatch.end();
