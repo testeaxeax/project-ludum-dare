@@ -8,6 +8,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public final class MainMenuScreen implements Screen, InputProcessor {
@@ -204,5 +206,18 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void render(float delta, float animationTimer) {
+		if(animationTimer >= 1f) {
+			Rectangle scissors = new Rectangle();
+			Rectangle clipBounds = new Rectangle(0, 0, Project.SCREEN_WIDTH, animationTimer);
+			ScissorStack.calculateScissors(cam, game.spritebatch.getTransformMatrix(), clipBounds, scissors);
+			ScissorStack.pushScissors(scissors);
+			
+			this.render(delta);
+			
+			ScissorStack.popScissors();
+		}
 	}
 }

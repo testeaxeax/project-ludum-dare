@@ -15,8 +15,10 @@ public final class SplashScreen implements Screen {
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	// SplashScreen will be displayed for at least 5 seconds
-	private static final int MIN_SHOWTIME = 4 * 1000;
-
+	private static final int MIN_SHOWTIME = 2 * 1000;
+	public static final float ANIMATION_DURATION = 4000f;
+	private static final float SIZE = 256f;
+	
 	private Project game;
 	private OrthographicCamera cam;
 	private long showtime;
@@ -24,6 +26,10 @@ public final class SplashScreen implements Screen {
 	private Animation<TextureRegion> animation;
 	
 	private float stateTimer;
+	private float animationTimer;
+	private float posY;
+	
+	private MainMenuScreen nextScreen;
 
 	public SplashScreen(Project game) {
 		this.game = game;
@@ -39,6 +45,9 @@ public final class SplashScreen implements Screen {
 			array.add(new TextureRegion(game.assetmanager.get(("graphics/lavalamp/LavaLamp-x.png").replace("x", String.valueOf(i)), Texture.class)));
 		
 		this.animation = new Animation<TextureRegion>(0.08f, array);
+		
+		this.animationTimer = 0f;
+		this.posY = 0f;
 		
 		this.stateTimer = 0f;
 		array.clear();
@@ -62,26 +71,38 @@ public final class SplashScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		checkprogress();
-		
-		float size = 256;
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
 		
-		game.spritebatch.draw(this.animation.getKeyFrame(this.stateTimer, true), CAM_WIDTH / 2 - size / 2, CAM_HEIGHT / 2 - size / 2, size, size);
-		
-		game.spritebatch.end();
-		
-		this.stateTimer += delta;
+		if(this.posY > CAM_HEIGHT) {
+			game.spritebatch.end();
+			this.dispose();
+			game.screenmanager.set(this.nextScreen);
+		} else {
+			if(this.checkprogress()) {
+				if(this.nextScreen == null)
+					this.nextScreen = new MainMenuScreen(game);
+				
+				this.posY += (-(float) Math.cos(Math.PI / 1.5f * this.animationTimer / ANIMATION_DURATION) + 1f) * CAM_HEIGHT * 1.5f;
+				
+				this.animationTimer += delta * 1000f;
+				
+				game.spritebatch.end();
+				this.nextScreen.render(delta, (float) posY);
+				game.spritebatch.begin();
+			}
+			
+			game.spritebatch.draw(this.animation.getKeyFrame(this.stateTimer, true), CAM_WIDTH / 2f - SIZE / 2f, posY, SIZE, SIZE);
+
+			game.spritebatch.end();
+			
+			this.stateTimer += delta;
+		}
 	}
 
-	private void checkprogress() {
-		boolean loaded = game.assetmanager.update();
-		if (TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && loaded) {
-			// TODO replace ScreenTemplate with actual game/menu screen
-			game.screenmanager.set(new MainMenuScreen(game));
-		}
+	private boolean checkprogress() {
+		return TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && game.assetmanager.update();
 	}
 
 	@Override
