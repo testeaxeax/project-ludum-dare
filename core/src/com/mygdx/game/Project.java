@@ -51,7 +51,7 @@ public class Project extends Game {
 		assetmanager.load("audio/sounds/beam.wav", Sound.class);
 		assetmanager.load("audio/sounds/click.wav", Sound.class);
 		
-		assetmanager.load("audio/music/music.ogg", Music.class);
+		//assetmanager.load("audio/music/music.ogg", Music.class);
 	}
 	
 	@Override
