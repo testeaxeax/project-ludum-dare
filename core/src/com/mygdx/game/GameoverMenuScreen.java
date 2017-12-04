@@ -5,10 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public final class GameoverMenuScreen implements Screen, InputProcessor {
 	
@@ -95,6 +98,39 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 		
 		
 		scoreLayout.setText(game.font, "Score: " + score + "\n" + "Level: " + level); 
+
+		game.spritebatch.end();
+		
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		
+		ShapeRenderer r = new ShapeRenderer();
+		r.setProjectionMatrix(cam.combined);
+		
+		r.setColor(new Color(0f, 0f, 0f, 0.7f));
+		
+		float margin = 16f;
+		int line_width = 3;
+		
+		r.begin(ShapeType.Filled);
+		r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
+		r.end();
+		
+		r.setColor(new Color(0f, 0f, 0f, 1f));
+		
+		r.begin(ShapeType.Line);
+		for(int i = 0; i < line_width; i++) {
+			r.rect(Project.SCREEN_WIDTH/2 - scoreLayout.width/2 - margin, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height * 1.5f - margin, scoreLayout.width + 2f * margin, scoreLayout.height + 2f * margin);
+			margin -= 1f;
+			if(margin < 0f)
+				break;
+		}
+		r.end();
+		
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		
+		game.spritebatch.begin();
+		
 		game.font.draw(game.spritebatch, scoreLayout, Project.SCREEN_WIDTH/2 - scoreLayout.width/2, Project.SCREEN_HEIGHT/1.5f - scoreLayout.height/2);
 		
 		game.spritebatch.end();
