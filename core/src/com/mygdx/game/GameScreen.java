@@ -75,6 +75,9 @@ public final class GameScreen implements Screen {
 	private int misses;
 	
 	private Polygon rayPol;
+	private boolean drawTutorial;
+	private Texture tutorialOverlay;
+	private static final String TUTORIAL_OVERLAY_PATH = "graphics/tutOverlay.png";
 	
 	public GameScreen(Project game) {
 		this.game = game;
@@ -85,6 +88,8 @@ public final class GameScreen implements Screen {
 		
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(0, 0, 1, 1);
+		
+		this.tutorialOverlay = game.assetmanager.get(TUTORIAL_OVERLAY_PATH);
 		
 //		pbAnimationTimer = 0f;
 		pbBorder = game.assetmanager.get(PB_BORDER_TEXTURE_PATH);
@@ -131,6 +136,8 @@ public final class GameScreen implements Screen {
 		this.shoot = false;
 		this.misses = 0;
 	
+		this.drawTutorial = true;
+		
 		this.level = 0;
 	}
 
@@ -152,6 +159,7 @@ public final class GameScreen implements Screen {
 			this.raydelta = 0d;
 			
 			shoot = true;
+			this.drawTutorial = false;
 		} else
 			shoot = false;
 		
@@ -278,6 +286,9 @@ public final class GameScreen implements Screen {
 		scoreLayout.setText(game.font, "Score: "  + score + "\n" + "Level: " + (level + 1));
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
+		if(this.drawTutorial)
+			game.spritebatch.draw(this.tutorialOverlay, 0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+		
 		game.spritebatch.end();
 		
 		ShapeRenderer sr = new ShapeRenderer();
@@ -301,7 +312,7 @@ public final class GameScreen implements Screen {
 		
 		sr.end();
 	}
-	
+
 	private Polygon createPolygon() {
 		Vector2 rel = sun.getPos();
 		
@@ -322,7 +333,7 @@ public final class GameScreen implements Screen {
 		
 		rayPol.rotate(360 - sun.getRotation());
 		
-		r.polygon(rayPol.getTransformedVertices());
+//		r.polygon(rayPol.getTransformedVertices());
 		
 		if(this.shoot) {
 			for(Planet p : this.planets)
@@ -342,10 +353,10 @@ public final class GameScreen implements Screen {
 			
 		}
 
-		r.polygon(rayPol.getTransformedVertices());
-		
-		for(Planet p : this.planets)
-			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
+//		r.polygon(rayPol.getTransformedVertices());
+//		
+//		for(Planet p : this.planets)
+//			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
 		
 
 		if(shoot)
@@ -418,6 +429,8 @@ public final class GameScreen implements Screen {
 		Explosion.load(m);
 		
 		m.load(ALARM_WAV_PATH, Sound.class);
+		
+		m.load(TUTORIAL_OVERLAY_PATH, Texture.class);
 	}
 	
 	@Override
@@ -453,6 +466,7 @@ public final class GameScreen implements Screen {
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
 		
 		game.assetmanager.unload(ALARM_WAV_PATH);
+		game.assetmanager.unload(TUTORIAL_OVERLAY_PATH);
 	}
 
 	public Texture[] getPlanetTextures() {

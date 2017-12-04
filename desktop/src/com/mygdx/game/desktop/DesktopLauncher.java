@@ -1,5 +1,6 @@
 package com.mygdx.game.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.Project;
@@ -10,6 +11,8 @@ public class DesktopLauncher {
 		config.height = Project.SCREEN_HEIGHT;
 		config.width = Project.SCREEN_WIDTH;
 		config.resizable = false;
+		config.title = "Spaceballz";
+		config.addIcon("graphics/sun_texture.png", Files.FileType.Internal);
 		new LwjglApplication(new Project(), config);
 	}
 }
