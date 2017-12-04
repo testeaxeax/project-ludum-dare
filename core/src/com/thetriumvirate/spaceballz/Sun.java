@@ -43,7 +43,7 @@ public class Sun implements SpaceObject {
 		y = (int) (origin.y + Math.sin(degree) * this.radius);
 		this.pos = new Vector2(x, y);
 		degree = 0;
-		temp = 50;
+		temp = 20;
 		this.gamescreen = gamescreen;
 		sun_texture = gamescreen.getGame().assetmanager.get(SUN_TEXTURE_PATH, Texture.class);
 	}
