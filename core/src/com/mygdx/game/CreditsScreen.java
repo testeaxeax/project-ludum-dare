@@ -3,11 +3,13 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public final class CreditsScreen implements Screen {
@@ -52,8 +54,8 @@ public final class CreditsScreen implements Screen {
 			game.screenmanager.pop();
 			dispose();
 		}
-		layout.setText(game.font, CREDITS);
-		Vector2 position = new Vector2(Project.SCREEN_WIDTH / 2 - layout.width / 2, Project.SCREEN_HEIGHT / 2 + layout.height / 2);
+		layout.setText(game.font, CREDITS, Color.WHITE, Project.SCREEN_WIDTH, Align.center, true);
+		Vector2 position = new Vector2(0, Project.SCREEN_HEIGHT / 2 + layout.height / 2);
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0 , Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 		game.spritebatch.end();
