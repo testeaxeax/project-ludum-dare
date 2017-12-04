@@ -30,7 +30,7 @@ public final class GameScreen implements Screen {
 	private Project game;
 	private OrthographicCamera cam;
 	
-	private Sun sun;
+	public Sun sun;
 	private TextureRegion texture_sunray_shaft;
 	private static final String SR_SHAFT = "graphics/rayshaft.png";
 	
@@ -77,7 +77,6 @@ public final class GameScreen implements Screen {
 	private Polygon rayPol;
 	
 	public GameScreen(Project game) {
-		
 		this.game = game;
 		
 		cam = new OrthographicCamera();
@@ -101,15 +100,16 @@ public final class GameScreen implements Screen {
 		pb = new ProgressBar(30, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 30, 0, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
 		
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 2);
+		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
+
 		this.planetTextures = new Texture[PLANET_TEXTURES];
 		
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			this.planetTextures[i] = game.assetmanager.get(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)), Texture.class);
-		
+
 		this.planets = PlanetManager.setupPlanets(MAX_PLANETS, this);
 		
-		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 100, 30, 2);
-		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 		
 		this.raydelta = 250d;
 		
@@ -141,20 +141,19 @@ public final class GameScreen implements Screen {
 			level++;
 			sun.levelUp(1);
 		}
+		
+		for(Planet p : this.planets)
+			p.update(delta);
+		
 		if(this.raydelta < 250d)
 			this.raydelta += 7;
 		
-			if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
-				this.raydelta = 0d;
-				
-				shoot = true;
-				// TODO: uncomment
-//				if(rayHitsPlanets())
-//					game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
-//				else
-//					game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
-			} else
-				this.shoot = false;
+		if(Gdx.input.justTouched() && this.raydelta >= 250d && sun.getTemp() > 3) {
+			this.raydelta = 0d;
+			
+			shoot = true;
+		} else
+			shoot = false;
 		
 		
 		sun.update(delta, this.raydelta <= 180);
@@ -283,7 +282,7 @@ public final class GameScreen implements Screen {
 		
 		ShapeRenderer sr = new ShapeRenderer();
 		
-		sr.setColor(Color.RED);
+		sr.setColor(shoot ? Color.WHITE : Color.RED);
 		sr.setProjectionMatrix(cam.combined);
 		sr.begin(ShapeType.Line);
 
@@ -293,12 +292,11 @@ public final class GameScreen implements Screen {
 			this.misses = 0;
 			game.assetmanager.get("audio/sounds/planet_vanish.wav", Sound.class).play(0.1f);
 		}
-		else if(shoot) {
+		else if(shoot){
 			if(misses > 3)
 				sun.increasetemp(2);
-			
-			misses++;
 			game.assetmanager.get("audio/sounds/beam.wav", Sound.class).play(0.2f);
+			misses++;
 		}
 		
 		sr.end();
@@ -321,11 +319,10 @@ public final class GameScreen implements Screen {
 	
 	private boolean rayHitsPlanets(ShapeRenderer r) {
 		ArrayList<Planet> toRemove = new ArrayList<Planet>();
-		Vector2 rel = sun.getPos();
 		
 		rayPol.rotate(360 - sun.getRotation());
 		
-//		r.polygon(rayPol.getTransformedVertices());
+		r.polygon(rayPol.getTransformedVertices());
 		
 		if(this.shoot) {
 			for(Planet p : this.planets)
@@ -333,9 +330,6 @@ public final class GameScreen implements Screen {
 						toRemove.add(p);
 						score++;
 					}
-			
-			for(Planet p : toRemove)
-				this.planets.remove(p);
 		}
 		rayPol.rotate(90);
 		
@@ -346,16 +340,19 @@ public final class GameScreen implements Screen {
 						score++;
 					}
 			
-			for(Planet p : toRemove)
-				this.planets.remove(p);
 		}
 
-//		r.polygon(rayPol.getTransformedVertices());
-//		
-//		for(Planet p : this.planets)
-//			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
+		r.polygon(rayPol.getTransformedVertices());
 		
+		for(Planet p : this.planets)
+			r.circle(p.getShape().x, p.getShape().y, p.getShape().radius);
 		
+
+		if(shoot)
+			for(Planet p : toRemove) {
+				this.planets.remove(p);
+				this.explosions.add(new Explosion(p));
+			}
 		
 		rayPol.rotate(sun.getRotation() - 90);
 		

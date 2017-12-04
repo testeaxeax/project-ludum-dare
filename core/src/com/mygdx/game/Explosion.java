@@ -18,7 +18,7 @@ public class Explosion {
 		this.x = parent.getPos().x;
 		this.y = parent .getPos().y;
 		
-		this.radius = parent.getRadius();
+		this.radius = parent.getRadius() * 2f;
 		
 		this.stateTimer = 0.0f;
 	}
