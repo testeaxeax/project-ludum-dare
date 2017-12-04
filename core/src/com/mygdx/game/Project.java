@@ -13,6 +13,8 @@ public class Project extends Game {
 	// Globally used constants
 	public static final int SCREEN_HEIGHT = 800;
 	public static final int SCREEN_WIDTH = 1024;
+	public static final float RATIO = (float) SCREEN_WIDTH / (float) SCREEN_HEIGHT;
+	
 	public static final Random RAND = new Random();
 	
 	// Globally used variables required for management and rendering

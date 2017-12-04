@@ -9,33 +9,60 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Planet{
 	private float radius;
+	private Vector2 origin;
 	private Vector2 pos;
+	private float dst;
 	
 	private Texture texture;
 	private GameScreen screen;
 	
 	private Circle shape;
 	
+	private float vel;
+	private float animationTimer;
+	
 	public Planet(GameScreen screen, ArrayList<Planet> planets, Texture texture) {
 		this.texture = texture;
 		this.screen = screen;
 		
+		this.origin = new Vector2();
 		this.pos = new Vector2();
+		
+		this.animationTimer = 0f;
+		this.vel = (Project.RAND.nextFloat() - 0.5f) * 14f;
 		
 		this.setup(planets);
 		
-		this.shape = new Circle(this.pos.x + this.radius, this.pos.y + this.radius, this.radius);
+		this.pos = this.origin;
+		this.shape = new Circle(this.origin.x + this.radius, this.origin.y + this.radius, this.radius);
+	}
+	
+	public void update(float delta) {
+		this.animationTimer += delta * this.vel;
+		
+		this.pos.set(screen.sun.getPos().x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO, screen.sun.getPos().y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst);
+		
+		this.shape.setPosition(this.pos.x + this.radius, this.pos.y + this.radius);
 	}
 	
 	private void setup(ArrayList<Planet> planets) {
 		this.radius = 10 + Project.RAND.nextFloat() * 25;
-		float x = 0f;
-		float y = 0f;
+		float x;
+		float y;
+		
+		Vector2 rel = screen.sun.getPos();
 		
 		do {
-			x = 20 + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_WIDTH - 40 - this.radius * 2) ;
-			y = 20 +  + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT - 40 - this.radius * 2);
-			this.pos.set(x, y);
+			this.animationTimer = Project.RAND.nextFloat() * 360f;
+			dst = Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT / 2f - screen.sun.getSunRadius() - 50f) + screen.sun.getSunRadius() + 50f;
+			
+			x = rel.x + (float) Math.cos(Math.toRadians(this.animationTimer)) * dst * Project.RATIO;
+			y = rel.y + (float) Math.sin(Math.toRadians(this.animationTimer)) * dst;
+			
+//			x = 20 + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_WIDTH - 40 - this.radius * 2) ;
+//			y = 20 +  + this.radius + Project.RAND.nextFloat() * (Project.SCREEN_HEIGHT - 40 - this.radius * 2);
+			
+			this.origin.set(x, y);
 		} while (!this.checkLocation(planets));
 		
 	}
@@ -43,11 +70,11 @@ public class Planet{
 	private boolean checkLocation(ArrayList<Planet> planets) {
 		Vector2 mid = new Vector2(Project.SCREEN_HEIGHT / 2f, Project.SCREEN_WIDTH / 2f);
 		
-		if(this.pos.dst(mid) < 250f + this.getRadius())
+		if(this.origin.dst(mid) < 250f + this.getRadius())
 			return false;
 		
 		for(Planet p : planets) {
-			if(this.pos.dst(p.pos) < p.getRadius() + 3f + this.getRadius())
+			if(this.origin.dst(p.origin) < p.getRadius() + 3f + this.getRadius())
 				return false;
 		}
 		
@@ -55,7 +82,7 @@ public class Planet{
 	}
 	
 	public boolean contains(float x, float y) {
-		return this.pos.dst(x, y) < this.radius;
+		return this.origin.dst(x, y) < this.radius;
 	}
 	
 	public float getRadius() {

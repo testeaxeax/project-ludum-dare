@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -21,12 +22,12 @@ public class PlanetManager {
 			planets.clear();
 			for(int i = 0; i < count; i++) 
 				planets.add(new Planet(screen, planets, textures[i % 7]));
-		} while (!checkPlanets(planets));
+		} while (!checkPlanets(planets, screen));
 		
 		return planets;
 	}
 	
-	private static boolean checkPlanets(ArrayList<Planet> planets) {
+	private static boolean checkPlanets(ArrayList<Planet> planets, GameScreen screen) {
 		float x = 0f;
 		float y = 0f;
 		
@@ -41,9 +42,8 @@ public class PlanetManager {
 		y /= planets.size();
 		
 		Vector2 delta = new Vector2(x, y);
-		Vector2 mid = new Vector2(Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2);
 		
-		if(mid.dst(delta) > 80)
+		if(screen.sun.getPos().dst(delta) > 80)
 			return false;
 		
 		return true;
