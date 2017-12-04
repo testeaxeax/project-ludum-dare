@@ -283,7 +283,7 @@ public final class GameScreen implements Screen {
 		game.spritebatch.draw(pb.getBorderTexture(),pb.getPosX(), pb.getPosY(), pb.getWidth(), pb.getHeight());
 
 		
-		scoreLayout.setText(game.font, "Score: "  + score);
+		scoreLayout.setText(game.font, "Score: "  + score + "\n" + "Level: " + (level + 1));
 		game.font.draw(game.spritebatch, scoreLayout, scorePosX, scorePosY);
 		
 		if(this.drawTutorial)
@@ -400,7 +400,7 @@ public final class GameScreen implements Screen {
 	
 	public void gameover() {
 		alarmSound.stop();
-		game.screenmanager.set(new GameoverMenuScreen(game));
+		game.screenmanager.set(new GameoverMenuScreen(game, score, level + 1));
 	}
 	
 	public Project getGame() {
