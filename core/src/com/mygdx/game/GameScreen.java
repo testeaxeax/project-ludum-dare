@@ -63,6 +63,9 @@ public final class GameScreen implements Screen {
 	
 	private Music music;
 	
+	private Sound alarmSound;
+	private static final String ALARM_WAV_PATH = "audio/sounds/alarm.wav";
+	
 	private Texture warning;
 	private static final String TEX_WARNING = "graphics/warning.png";
 	private float warning_sin;
@@ -114,6 +117,10 @@ public final class GameScreen implements Screen {
 		
 		Explosion.setup(game.assetmanager);
 		this.explosions = new ArrayList<Explosion>();
+		
+		
+		alarmSound = game.assetmanager.get(ALARM_WAV_PATH, Sound.class);
+		
 		
 //		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
 //		music.setLooping(true);
@@ -217,6 +224,7 @@ public final class GameScreen implements Screen {
 			if(!this.warned_before) {
 				warning_sin = 0f;
 				warned_before = true;
+				alarmSound.loop(0.5f);
 			}
 			else
 				warning_sin += delta * 4.5f;
@@ -225,8 +233,11 @@ public final class GameScreen implements Screen {
 			
 			c = game.spritebatch.getColor();
 			game.spritebatch.setColor(c.r, c.g, c.b, 1f);
+			
+			
 		} else {
 			warned_before = false;
+			alarmSound.stop();
 		}
 		
 		
@@ -380,6 +391,7 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void gameover() {
+		alarmSound.stop();
 		game.screenmanager.set(new GameoverMenuScreen(game));
 	}
 	
@@ -407,6 +419,8 @@ public final class GameScreen implements Screen {
 		m.load(TEX_WARNING, Texture.class);
 		
 		Explosion.load(m);
+		
+		m.load(ALARM_WAV_PATH, Sound.class);
 	}
 	
 	@Override
@@ -440,6 +454,8 @@ public final class GameScreen implements Screen {
 		
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
+		
+		game.assetmanager.unload(ALARM_WAV_PATH);
 	}
 
 	public Texture[] getPlanetTextures() {
