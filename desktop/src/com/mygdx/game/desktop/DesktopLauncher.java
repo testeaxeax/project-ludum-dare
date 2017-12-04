@@ -12,7 +12,8 @@ public class DesktopLauncher {
 		config.width = Project.SCREEN_WIDTH;
 		config.resizable = false;
 		config.title = "Spaceballz";
-		config.addIcon("graphics/sun_texture.png", Files.FileType.Internal);
+		config.addIcon("graphics/icon32.png", Files.FileType.Internal);
+		config.addIcon("graphics/icon16.png", Files.FileType.Internal);
 		new LwjglApplication(new Project(), config);
 	}
 }
