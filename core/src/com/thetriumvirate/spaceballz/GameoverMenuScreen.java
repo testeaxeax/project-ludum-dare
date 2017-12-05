@@ -160,7 +160,7 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	@Override
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
-		game.music.play();;
+		game.music.play();
 	}
 
 	@Override
