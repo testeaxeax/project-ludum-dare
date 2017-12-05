@@ -2,6 +2,7 @@ package com.thetriumvirate.spaceballz;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -79,8 +80,12 @@ public final class SplashScreen implements Screen {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			game.spritebatch.begin();
 			if(this.checkprogress()) {
-				if(this.nextScreen == null)
-					this.nextScreen = new MainMenuScreen(game);
+				if(this.nextScreen == null) {
+						game.music = game.assetmanager.get("audio/music/music.wav", Music.class);
+						game.music.setLooping(true);
+						game.music.setVolume(0.1f);
+						this.nextScreen = new MainMenuScreen(game);
+					}
 				
 				this.posY += (-(float) Math.cos(Math.PI / 1.5f * this.animationTimer / ANIMATION_DURATION) + 1f) * CAM_HEIGHT * 1.5f;
 				

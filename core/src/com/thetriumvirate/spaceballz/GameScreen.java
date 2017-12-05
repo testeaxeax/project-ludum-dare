@@ -61,8 +61,6 @@ public final class GameScreen implements Screen {
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
 	private GlyphLayout scoreLayout;
 	
-	private Music music;
-	
 	private Sound alarmSound;
 	private static final String ALARM_WAV_PATH = "audio/sounds/alarm.wav";
 	
@@ -127,11 +125,6 @@ public final class GameScreen implements Screen {
 		
 		alarmSound = game.assetmanager.get(ALARM_WAV_PATH, Sound.class);
 		
-		
-//		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
-//		music.setLooping(true);
-//		music.setVolume(0.1f);		
-//		music.play();
 		
 		this.rayPol = createPolygon();
 		this.shoot = false;
