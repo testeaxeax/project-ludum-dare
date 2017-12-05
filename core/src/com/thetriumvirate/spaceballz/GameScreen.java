@@ -61,9 +61,6 @@ public final class GameScreen implements Screen {
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
 	private GlyphLayout scoreLayout;
 	
-	private Music music;
-	
-	
 	private Texture warning;
 	private static final String TEX_WARNING = "graphics/warning.png";
 	public static final String EXPLOSION_SUN_ASSET_PATH = "audio/sounds/explosion_sun.wav";
@@ -124,11 +121,6 @@ public final class GameScreen implements Screen {
 		
 		
 		
-		
-//		music = game.assetmanager.get("audio/music/music.ogg", Music.class);
-//		music.setLooping(true);
-//		music.setVolume(0.1f);		
-//		music.play();
 		
 		this.rayPol = createPolygon();
 		this.shoot = false;

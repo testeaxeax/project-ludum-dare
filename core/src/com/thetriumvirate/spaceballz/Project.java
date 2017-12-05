@@ -22,6 +22,9 @@ public class Project extends Game {
 	public AdvancedAssetManager assetmanager;
 	public ScreenManager screenmanager;
 	
+	// Default music
+	public Music music;
+	
 	// Default font
 	public BitmapFont font;
 	
@@ -42,7 +45,6 @@ public class Project extends Game {
 		
 		// Load sounds
 		loadSounds();
-		
 		screenmanager.push(new SplashScreen(this));
 	}
 	
@@ -50,8 +52,7 @@ public class Project extends Game {
 		assetmanager.load("audio/sounds/planet_vanish.wav", Sound.class);
 		assetmanager.load("audio/sounds/beam.wav", Sound.class);
 		assetmanager.load("audio/sounds/click.wav", Sound.class);
-		
-		//assetmanager.load("audio/music/music.ogg", Music.class);
+		assetmanager.load("audio/music/music.wav", Music.class);
 	}
 	
 	@Override
