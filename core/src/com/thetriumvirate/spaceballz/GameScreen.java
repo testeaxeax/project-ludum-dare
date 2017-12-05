@@ -61,9 +61,6 @@ public final class GameScreen implements Screen {
 	private float scorePosX = 0.8f * Project.SCREEN_WIDTH, scorePosY = 0.9f * Project.SCREEN_HEIGHT;
 	private GlyphLayout scoreLayout;
 	
-	private Sound alarmSound;
-	private static final String ALARM_WAV_PATH = "audio/sounds/alarm.wav";
-	
 	private Texture warning;
 	private static final String TEX_WARNING = "graphics/warning.png";
 	public static final String EXPLOSION_SUN_ASSET_PATH = "audio/sounds/explosion_sun.wav";
@@ -123,7 +120,6 @@ public final class GameScreen implements Screen {
 		this.explosions = new ArrayList<Explosion>();
 		
 		
-		alarmSound = game.assetmanager.get(ALARM_WAV_PATH, Sound.class);
 		
 		
 		this.rayPol = createPolygon();
@@ -229,7 +225,6 @@ public final class GameScreen implements Screen {
 			if(!this.warned_before) {
 				warning_sin = 0f;
 				warned_before = true;
-				alarmSound.loop(0.5f);
 			}
 			else
 				warning_sin += delta * 4.5f;
@@ -242,7 +237,6 @@ public final class GameScreen implements Screen {
 			
 		} else {
 			warned_before = false;
-			alarmSound.stop();
 		}
 		
 		
@@ -397,7 +391,6 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void gameover() {
-		alarmSound.stop();
 		game.screenmanager.set(new GameoverMenuScreen(game, score, level + 1));
 	}
 	
@@ -426,7 +419,6 @@ public final class GameScreen implements Screen {
 		
 		Explosion.load(m);
 		
-		m.load(ALARM_WAV_PATH, Sound.class);
     m.load(TUTORIAL_OVERLAY_PATH, Texture.class);
 		m.load(EXPLOSION_SUN_ASSET_PATH, Sound.class);
 	}
@@ -467,7 +459,6 @@ public final class GameScreen implements Screen {
 		for(int i = 0; i < PLANET_TEXTURES; i++)
 			game.assetmanager.unload(PLANETS_TEXTURE_PATH.replace("x", String.valueOf(i)));
 		
-		game.assetmanager.unload(ALARM_WAV_PATH);
 		game.assetmanager.unload(TUTORIAL_OVERLAY_PATH);
 		game.assetmanager.unload(TEX_WARNING);
 		game.assetmanager.unload(EXPLOSION_SUN_ASSET_PATH);
