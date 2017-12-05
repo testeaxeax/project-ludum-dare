@@ -52,7 +52,7 @@ public class Project extends Game {
 		assetmanager.load("audio/sounds/planet_vanish.wav", Sound.class);
 		assetmanager.load("audio/sounds/beam.wav", Sound.class);
 		assetmanager.load("audio/sounds/click.wav", Sound.class);
-		assetmanager.load("audio/music/music.wav", Music.class);
+		assetmanager.load("audio/music/music.mp3", Music.class);
 	}
 	
 	@Override

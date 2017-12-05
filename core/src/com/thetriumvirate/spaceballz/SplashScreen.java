@@ -81,7 +81,7 @@ public final class SplashScreen implements Screen {
 			game.spritebatch.begin();
 			if(this.checkprogress()) {
 				if(this.nextScreen == null) {
-						game.music = game.assetmanager.get("audio/music/music.wav", Music.class);
+						game.music = game.assetmanager.get("audio/music/music.mp3", Music.class);
 						game.music.setLooping(true);
 						game.music.setVolume(0.1f);
 						this.nextScreen = new MainMenuScreen(game);
