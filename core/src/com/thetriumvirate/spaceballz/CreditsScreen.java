@@ -17,7 +17,9 @@ public final class CreditsScreen implements Screen {
 	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
 	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String CREDITS_BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
-	private static final String CREDITS = "Game developed for Ludum Dare 40 within 72 hours by:\nInzenhofer Tobias\nPoellinger Maximilian\nBrunner Moritz";
+	private static final String CREDITS = "Game developed for Ludum Dare 40 within 72 hours by:\nInzenhofer Tobias\n"
+			+ "Poellinger Maximilian\nBrunner Moritz\n\nSpecial thanks to the following projects:\nlibGDX, lwjgl, JUtils, "
+			+ "JInput, JOrbis, Eclipse\n\nFor Licenses view our Github repository or extract this file";
 	
 	private Project game;
 	private OrthographicCamera cam;
