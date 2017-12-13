@@ -5,19 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public final class GameoverMenuScreen implements Screen, InputProcessor {
 	
-	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
-	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String RESTARTBUTTON_TEXTURE_ASSET_PATH = "graphics/restartbutton.png";
 	private static final String MENUBUTTON_TEXTURE_ASSET_PATH = "graphics/menubutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
@@ -29,22 +23,29 @@ public final class GameoverMenuScreen implements Screen, InputProcessor {
 	private Button bmenu;
 	private Texture background;
 	private Texture tBlack;
+	private int CAM_WIDTH;
+	private int CAM_HEIGHT;
 	
 	
 	private int score, level;
 	private GlyphLayout scoreLayout;
 	
 	public GameoverMenuScreen(Project game, int score, int level) {
+		CAM_WIDTH = Project.SCREEN_WIDTH;
+		CAM_HEIGHT = Project.SCREEN_HEIGHT;
 		this.game = game;
 		this.score = score;
 		this.level = level;
+		
+		prefetch(game.assetmanager);
+		game.assetmanager.finishLoading();
 		
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
 		
 		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
 		
-		brestart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
-		bmenu = new Button(CAM_WIDTH * 3 / 4, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		brestart = new Button(CAM_WIDTH / 4, CAM_HEIGHT / 2, Project.DEFAULT_BUTTON_WIDTH, Project.DEFAULT_BUTTON_HEIGHT, game.assetmanager.get(RESTARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		bmenu = new Button(CAM_WIDTH * 3 / 4, CAM_HEIGHT / 2, Project.DEFAULT_BUTTON_WIDTH, Project.DEFAULT_BUTTON_HEIGHT, game.assetmanager.get(MENUBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
 		
 		brestart.setX(brestart.getX() - brestart.getWidth() / 2);
 		brestart.setY(brestart.getY() - brestart.getHeight() / 2);

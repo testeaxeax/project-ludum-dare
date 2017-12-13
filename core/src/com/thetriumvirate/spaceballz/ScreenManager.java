@@ -22,25 +22,41 @@ public class ScreenManager {
 		game.setScreen(s);
 	}
 	
-	public void pop() {
+	public void pop(boolean keepassets) {
+		Screen old = null;
 		try {
-			stack.pop();
-			game.setScreen(stack.peek());
+			old = stack.pop();
 		} catch (EmptyStackException e) {
 			e.printStackTrace();
 			Gdx.app.exit();
 		}
+		game.setScreen(stack.peek());
+		if(!keepassets) {
+			old.dispose();
+		}
 	}
 	
-	public void set(Screen s) {
+	public void pop() {
+		pop(false);
+	}
+	
+	public void set(Screen s, boolean keepassets) {
+		Screen old = null;
 		try {
-			stack.pop();
+			old = stack.pop();
 		} catch (EmptyStackException e) {
 			e.printStackTrace();
 			Gdx.app.exit();
 		}
 		stack.push(s);
 		game.setScreen(s);
+		if(!keepassets) {
+			old.dispose();
+		}
+	}
+	
+	public void set(Screen s) {
+		set(s, false);
 	}
 	
 	public Screen get() {

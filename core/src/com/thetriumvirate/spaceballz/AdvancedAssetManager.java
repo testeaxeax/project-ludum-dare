@@ -1,5 +1,6 @@
 package com.thetriumvirate.spaceballz;
 
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 
 public class AdvancedAssetManager extends AssetManager {
@@ -9,6 +10,14 @@ public class AdvancedAssetManager extends AssetManager {
 	public <T> T easyget(String filename, Class<T> type) {
 		if(!super.isLoaded(filename, type)) {
 			super.load(filename, type);
+			super.finishLoadingAsset(filename);
+		}
+		return super.get(filename, type);
+	}
+	
+	public <T> T easyget(String filename, Class<T> type, AssetLoaderParameters<T> param) {
+		if(!super.isLoaded(filename, type)) {
+			super.load(filename, type, param);
 			super.finishLoadingAsset(filename);
 		}
 		return super.get(filename, type);

@@ -24,7 +24,6 @@ public class Sun implements SpaceObject {
 	private Texture sun_texture;
 	private GameScreen gamescreen;
 	private Explosion explosion = null;
-	private Sound sound;
 	
 	private int level;
 	

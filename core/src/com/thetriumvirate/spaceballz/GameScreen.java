@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 public final class GameScreen implements Screen {
 	
-	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
-	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
+	private static int CAM_WIDTH = Project.SCREEN_WIDTH;
+	private static int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	
 	private Project game;
 	private OrthographicCamera cam;
@@ -76,6 +75,8 @@ public final class GameScreen implements Screen {
 	private static final String TUTORIAL_OVERLAY_PATH = "graphics/tutOverlay.png";
 	
 	public GameScreen(Project game) {
+		CAM_WIDTH = Project.SCREEN_WIDTH;
+		CAM_HEIGHT = Project.SCREEN_HEIGHT;
 		this.game = game;
 		
 		cam = new OrthographicCamera();
@@ -97,11 +98,11 @@ public final class GameScreen implements Screen {
 		this.warning_sin = 0f;
 		this.warned_before = false;
 		
-		
-		pb = new ProgressBar(30, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - 30, 0, pbBorder, pbInfill);
+		float pb_width = Project.SCREEN_WIDTH * 0.029296875f;
+		pb = new ProgressBar(pb_width, Project.SCREEN_HEIGHT, Project.SCREEN_WIDTH - pb_width, 0, pbBorder, pbInfill);
 		pb.setPercentage(0.2f);
-		
-		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, 50, 30, 2);
+
+		sun = new Sun(this, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0, (int) (Project.SCREEN_WIDTH * 0.048828125f), 30, 2);
 		texture_sunray_shaft = new TextureRegion((Texture) game.assetmanager.get(SR_SHAFT));
 
 		this.planetTextures = new Texture[PLANET_TEXTURES];
@@ -177,7 +178,7 @@ public final class GameScreen implements Screen {
 		if(this.raydelta < 180) {
 			float sin = (float) Math.sin(this.raydelta / 180d * Math.PI);
 			
-			float size_shaft = 3 + 7f * sin;
+			float size_shaft = Project.SCREEN_WIDTH * 0.0029296875f + 7f * sin;
 			float length = Project.SCREEN_WIDTH * 4f * sin;
 			
 			game.spritebatch.draw(texture_sunray_shaft, (float) Project.SCREEN_WIDTH / 2 - length / 2f - sun_width / 2, sun.getOriginPos().y - size_shaft / 2f, 
@@ -197,7 +198,7 @@ public final class GameScreen implements Screen {
 			// Render Sun
 			game.spritebatch.draw (sun.getSun_texture(),
 					(float) sun.getPos().x, (float) sun.getPos().y, 
-					(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), sun.getSun_texture().getWidth() / sun_width, sun.getSun_texture().getHeight() / sun_height, 
+					(float) sun.getSun_texture().getWidth() / 2, (float) sun.getSun_texture().getHeight() / 2, (float) sun.getSun_texture().getWidth(), (float) sun.getSun_texture().getHeight(), (float) sun_width / (float) sun.getSun_texture().getWidth(), (float) sun_height / (float) sun.getSun_texture().getHeight(), 
 					360f - sun.getRotation(), 
 					0, 0, (int) sun.getSun_texture().getWidth(), (int) sun.getSun_texture().getHeight(), 
 					false, false);
@@ -391,7 +392,7 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void gameover() {
-		game.screenmanager.set(new GameoverMenuScreen(game, score, level + 1));
+		game.screenmanager.set(new GameoverMenuScreen(game, score, level + 1), true);
 	}
 	
 	public Project getGame() {

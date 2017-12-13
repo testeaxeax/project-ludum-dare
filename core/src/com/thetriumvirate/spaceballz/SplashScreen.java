@@ -13,16 +13,16 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public final class SplashScreen implements Screen {
 
-	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
-	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	// SplashScreen will be displayed for at least 5 seconds
 	private static final int MIN_SHOWTIME = 2 * 1000;
 	public static final float ANIMATION_DURATION = 4000f;
-	private static final float SIZE = 256f;
 	
 	private Project game;
 	private OrthographicCamera cam;
 	private long showtime;
+	private int CAM_WIDTH;
+	private int CAM_HEIGHT;
+	private float SIZE;
 	
 	private Animation<TextureRegion> animation;
 	
@@ -33,6 +33,9 @@ public final class SplashScreen implements Screen {
 	private MainMenuScreen nextScreen;
 
 	public SplashScreen(Project game) {
+		CAM_WIDTH = Project.SCREEN_WIDTH;
+		CAM_HEIGHT = Project.SCREEN_HEIGHT;
+		SIZE = CAM_WIDTH * 0.25f;
 		this.game = game;
 		
 		for(int i = 1; i <= 13; i++)
@@ -64,9 +67,6 @@ public final class SplashScreen implements Screen {
 	@Override
 	public void show() {
 		GameScreen.prefetch(game.assetmanager);
-		MainMenuScreen.prefetch(game.assetmanager);
-		CreditsScreen.prefetch(game.assetmanager);
-		GameoverMenuScreen.prefetch(game.assetmanager);
 		showtime = TimeUtils.millis();
 	}
 
@@ -74,7 +74,6 @@ public final class SplashScreen implements Screen {
 	public void render(float delta) {
 		
 		if(this.posY > CAM_HEIGHT) {
-			this.dispose();
 			game.screenmanager.set(this.nextScreen);
 		} else {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

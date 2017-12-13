@@ -14,8 +14,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public final class CreditsScreen implements Screen {
 	
-	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
-	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String CREDITS_BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
 	private static final String CREDITS = "Game developed for Ludum Dare 40 within 72 hours by:\nInzenhofer Tobias\n"
 			+ "Poellinger Maximilian\nBrunner Moritz\n\nSpecial thanks to the following projects:\nlibGDX, lwjgl, JUtils, "
@@ -26,9 +24,17 @@ public final class CreditsScreen implements Screen {
 	private Texture background;
 	private GlyphLayout layout;
 	private long last_touched;
+	private int CAM_WIDTH;
+	private int CAM_HEIGHT;
 	
 	public CreditsScreen(Project game) {
+		CAM_WIDTH = Project.SCREEN_WIDTH;
+		CAM_HEIGHT = Project.SCREEN_HEIGHT;
 		this.game = game;
+		
+		prefetch(game.assetmanager);
+		game.assetmanager.finishLoading();
+		
 		background = game.assetmanager.get(CREDITS_BACKGROUND_ASSET_PATH);
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
@@ -51,10 +57,9 @@ public final class CreditsScreen implements Screen {
 		
 		MainMenuScreen.mesh.update(delta, x, y);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(last_touched) > 500) {
+		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(last_touched) > 100) {
 			last_touched = TimeUtils.millis();
 			game.screenmanager.pop();
-			dispose();
 		}
 		layout.setText(game.font, CREDITS, Color.WHITE, Project.SCREEN_WIDTH, Align.center, true);
 		Vector2 position = new Vector2(0, Project.SCREEN_HEIGHT / 2 + layout.height / 2);

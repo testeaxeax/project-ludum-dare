@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class BackgroundMesh {
-	private static final int PARTICLES = 150;
+	private static final int PARTICLES = (int) (Project.SCREEN_WIDTH * 0.146484375f);
+	private static final int RANGE = (int) (Project.SCREEN_WIDTH * 0.146484375f);
 	
 	private ArrayList<Particle> particles;
 	private ArrayList<Particle> inRange;
@@ -63,7 +64,7 @@ public class BackgroundMesh {
 		this.inRange.clear();
 		
 		for(Particle p : this.particles)
-			if(p.pos.dst(mouse) < 150)
+			if(p.pos.dst(mouse) < RANGE)
 				this.inRange.add(p);
 	}
 	
