@@ -14,6 +14,6 @@ public class DesktopLauncher {
 		config.title = "Spaceballz";
 		config.addIcon("graphics/icon32.png", Files.FileType.Internal);
 		config.addIcon("graphics/icon16.png", Files.FileType.Internal);
-		new LwjglApplication(new Project(), config);
+		new LwjglApplication(new Project(new DesktopFontLoader()), config);
 	}
 }

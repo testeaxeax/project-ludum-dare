@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,8 +14,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public final class MainMenuScreen implements Screen, InputProcessor {
 	
-	private static final int CAM_WIDTH = Project.SCREEN_WIDTH;
-	private static final int CAM_HEIGHT = Project.SCREEN_HEIGHT;
 	private static final String STARTBUTTON_TEXTURE_ASSET_PATH = "graphics/startbutton.png";
 	private static final String CREDITSBUTTON_TEXTURE_ASSET_PATH = "graphics/creditsbutton.png";
 	private static final String BACKGROUND_ASSET_PATH = "graphics/gameBackground.png";
@@ -32,18 +29,25 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 	private Texture tBlack;
 	private Texture title;
 	private long last_click;
+	private int CAM_WIDTH;
+	private int CAM_HEIGHT;
 	
 	public static BackgroundMesh mesh;
 	
 	public MainMenuScreen(Project game) {
+		CAM_WIDTH = Project.SCREEN_WIDTH;
+		CAM_HEIGHT = Project.SCREEN_HEIGHT;
 		this.game = game;
+		
+		prefetch(game.assetmanager);
+		game.assetmanager.finishLoading();
 		
 		background = game.assetmanager.get(BACKGROUND_ASSET_PATH, Texture.class);
 		
 		tBlack = game.assetmanager.get(TEXTURE_BLACK_PATH, Texture.class);
 		
-		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, 200, 100, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
-		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, 200, 100, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		bstart = new Button(CAM_WIDTH / 2, CAM_HEIGHT / 2, Project.DEFAULT_BUTTON_WIDTH, Project.DEFAULT_BUTTON_HEIGHT, game.assetmanager.get(STARTBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
+		bcredits = new Button(CAM_WIDTH - CAM_WIDTH / 4, CAM_HEIGHT / 8, Project.DEFAULT_BUTTON_WIDTH, Project.DEFAULT_BUTTON_HEIGHT, game.assetmanager.get(CREDITSBUTTON_TEXTURE_ASSET_PATH, Texture.class), game);
 		
 		title = game.assetmanager.get(TITLE_TEXTURE_PATH, Texture.class);
 		
@@ -106,7 +110,7 @@ public final class MainMenuScreen implements Screen, InputProcessor {
 			game.spritebatch.draw(bcredits.getTexture(), bcredits.getX() + 2, bcredits.getY() + 1, bcredits.getWidth() - 4, bcredits.getHeight() - 2);
 		}
 		
-		game.spritebatch.draw(title, Project.SCREEN_WIDTH/2 - 400, Project.SCREEN_HEIGHT -320, 800, 300);
+		game.spritebatch.draw(title, Project.SCREEN_WIDTH/2 - Project.SCREEN_WIDTH * 0.390625f, Project.SCREEN_HEIGHT - Project.SCREEN_HEIGHT * 0.4f, CAM_WIDTH * 0.78125f, CAM_WIDTH * 0.29296875f);
 		
 		
 		game.spritebatch.end();

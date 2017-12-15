@@ -2,7 +2,6 @@ package com.thetriumvirate.spaceballz;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -51,7 +50,7 @@ public class Planet implements SpaceObject{
 	}
 	
 	private void setup(ArrayList<Planet> planets) {
-		this.radius = 10 + Project.RAND.nextFloat() * 25;
+		this.radius = Project.SCREEN_WIDTH * 0.009765625f + Project.RAND.nextFloat() * Project.SCREEN_WIDTH * 0.0244140625f;
 		float x;
 		float y;
 		
@@ -73,7 +72,7 @@ public class Planet implements SpaceObject{
 	}
 	
 	private boolean checkLocation(ArrayList<Planet> planets) {
-		if(this.origin.dst(screen.sun.getPos()) < 250f + this.getRadius())
+		if(this.origin.dst(screen.sun.getPos()) < 125f + this.getRadius())
 			return false;
 		
 		for(Planet p : planets) {
