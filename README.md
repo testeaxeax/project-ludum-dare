@@ -1,3 +1,5 @@
+**Warning: This repository is inactive and no longer maintained.**
+
 [![Build Status](https://travis-ci.org/testeaxeax/project-ludum-dare.svg?branch=master)](https://travis-ci.org/testeaxeax/project-ludum-dare)
 
 **Installation instructions:**
